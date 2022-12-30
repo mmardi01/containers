@@ -6,15 +6,17 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2022/12/29 01:10:33 by mmardi           ###   ########.fr       */
+/*   Updated: 2022/12/30 01:46:34 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 #define VECTOR_HP
-# include<stdio.h>
+#include<stdio.h>
 #include <iostream>
-# include <vector>
+#include "vectorIterator.hpp"
+
+
 namespace ft
 {
     template <class T, class Alloc = std::allocator<T> >
@@ -33,6 +35,8 @@ namespace ft
         typedef typename allocator_type::const_reference const_reference;
         typedef typename allocator_type::pointer         pointer;
         typedef typename allocator_type::const_pointer   const_pointer;
+        typedef vectorIterator<T>                        iterator;
+        typedef const vectorIterator<T>                  const_iterator;
         typedef size_t                                   size_type;
 
         // _________________/ Constructors \_________________ //
@@ -80,15 +84,52 @@ namespace ft
             }
             return *this;
         };
-        
+
+
         // _________________/ Destructor \_________________ //
-        
+
         ~vector() {
             __size = 0;
             _allocator.deallocate(arr,__capacity);
             __capacity = 0;
         };
         
+        // _________________/ Iterators \_________________ //
+
+        iterator begin() {
+            
+            return iterator(&arr[0]);
+        }
+        
+        const_iterator begin() const
+        {
+
+            return const_iterator(&arr[0]);
+        }
+
+        iterator end()
+        {
+
+            return iterator(&arr[__size]);
+        }
+
+        const_iterator end() const
+        {
+
+            return const_iterator(&arr[__size]);
+        }
+        
+        const_iterator cbegin() const throw() {
+
+            return const_iterator(&arr[0]);
+        }
+
+        const_iterator cend() const throw()
+        {
+
+            return const_iterator(&arr[__size]);
+        }
+
         // _________________/ Capacity \_________________ //
         
         size_type size() const {
@@ -194,11 +235,20 @@ namespace ft
         }
 
         void swap(vector &x) {
-            ft::vector<value_type> tmp = *this;
-            __capacity = 0;
-            *this = x;
-            x.__capacity = 0;
-            x = tmp;
+            value_type tmpSize = __size;
+            value_type tmpCapacity = __capacity;
+            Alloc tmpAllocator = _allocator;
+            T* tmpArr = arr;
+            
+            __size = x.size();
+            __capacity = x.capacity();
+            arr = x.arr;
+            _allocator = x.get_allocator();
+            
+            x.__size = tmpSize;
+            x.__capacity = tmpCapacity;
+            x._allocator = tmpAllocator;
+            x.arr = tmpArr;
         }
 
         // _________________/ Allocator \_________________ //

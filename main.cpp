@@ -6,43 +6,35 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2022/12/29 01:13:19 by mmardi           ###   ########.fr       */
+/*   Updated: 2022/12/30 01:48:45 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "vector.hpp"
 #include <vector>
 #include <memory>
-int main() {
-	{
-		ft::vector<int> foo(10, 100);
-		ft::vector<int> bar;
-		std::cout << "foo capacity: " << foo.capacity() << " foo size: " << foo.size() << std::endl;
-		std::cout << "bar capacity: " << bar.capacity() << " bar size: " << bar.size() << std::endl;
-		foo.swap(bar);
-		std::cout << "foo capacity: " << foo.capacity() << " foo size: " << foo.size() << std::endl;
-		std::cout << "bar capacity: " << bar.capacity() << " bar size: " << bar.size() << std::endl;
-		std::cout << bar[9];
-		}
-	// std::cout <<"\n__________________________________________\n" <<std::endl;
-	// {
-	// ft::vector<int> foo;
-	// foo.back();
-	// // ft::vector<int> bar(9, 2);
-	// // std::cout << "capacity of bar: " << int(bar.capacity()) << '\n';
-	// // std::cout << "Size of bar: " << int(bar.size()) << '\n';
-	
-	// // bar = foo;
-	// // for (size_t i = 0; i < bar.size(); i++)
-	// // {
-	// // 	std::cout << bar[i] ;
-	// // }
-	
-	// // std::cout << std::endl;
-	// // // std::cout << "capacity of foo: " << int(foo.capacity()) << '\n';
-	// // std::cout << "capacity of bar: " << int(bar.capacity()) << '\n';
-	// // // std::cout << "Size of foo: " << int(foo.size()) << '\n';
-	// // std::cout << "Size of bar: " << int(bar.size()) << '\n';
+#include <iterator> // std::iterator, std::input_iterator_tag
+
+using namespace std;
+
+int main()
+{
+	ft::vector<int> b;
+	// b.push_back(1);
+	// b.push_back(2);
+	// b.push_back(3);
+	// b.push_back(4);
+	// b.push_back(5);
+	ft::vector<int>::const_iterator a = b.end();
+	(void)a;
+	// vector<int>::iterator k = b.end();
+	// while (a != k) {
+	// 	cout << *a++ << endl;
 	// }
+	
+	// // std::cout << *k << std::endl;
+	// int z = a - k;
+	// std::cout <<z  << std::endl;
+
 	return 0;
 }
