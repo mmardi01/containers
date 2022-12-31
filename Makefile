@@ -6,17 +6,17 @@
 #    By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/27 16:51:26 by mmardi            #+#    #+#              #
-#    Updated: 2022/12/30 01:39:02 by mmardi           ###   ########.fr        #
+#    Updated: 2022/12/31 02:55:53 by mmardi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =   containers
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror
 
 SRC = main.cpp
 
-HEADER = vector.hpp vectorIterator.hpp
+HEADER = vector.hpp vectorIterator.hpp reverse_iterator.hpp iterator_traits.hpp
 
 OBJ = $(SRC:.cpp=.o)
 

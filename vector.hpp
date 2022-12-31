@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2022/12/30 01:46:34 by mmardi           ###   ########.fr       */
+/*   Updated: 2022/12/31 03:12:55 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include<stdio.h>
 #include <iostream>
 #include "vectorIterator.hpp"
-
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -37,6 +37,8 @@ namespace ft
         typedef typename allocator_type::const_pointer   const_pointer;
         typedef vectorIterator<T>                        iterator;
         typedef const vectorIterator<T>                  const_iterator;
+        typedef ft::reverse_iterator<iterator>           reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>     const_reverse_iterator;
         typedef size_t                                   size_type;
 
         // _________________/ Constructors \_________________ //
@@ -118,13 +120,43 @@ namespace ft
 
             return const_iterator(&arr[__size]);
         }
-        
+
+        reverse_iterator rbegin(){
+
+            return (reverse_iterator(this->end()));
+        }
+
+        const_reverse_iterator rbegin() const {
+
+            return (reverse_iterator(this->end()));
+        }
+
+        reverse_iterator rend() {
+
+            return (reverse_iterator(this->begin()));
+        }
+
+        const_reverse_iterator rend() const {
+
+            return (reverse_iterator(this->begin()));
+        }
+
         const_iterator cbegin() const throw() {
 
             return const_iterator(&arr[0]);
         }
 
-        const_iterator cend() const throw()
+        const_reverse_iterator crbegin() const  {
+            
+            return (const_reverse_iterator(this->end()));
+        }
+
+        const_reverse_iterator crend() const {
+
+            return (const_reverse_iterator(this->begin()));
+        }
+
+            const_iterator cend() const throw()
         {
 
             return const_iterator(&arr[__size]);
@@ -136,11 +168,90 @@ namespace ft
             return __size;
         };
 
+        size_type max_size() const {
+
+            return (_allocator.max_size());
+        }
+
         size_type capacity() const {
             
             return __capacity;
         };
-        
+
+        void resize(size_type n, value_type val = value_type()) {
+
+            if (__size < n) {
+                if (n <= __capacity) {
+                    while (__size < n) {
+
+                        arr[__size] = val;
+                        __size++;
+                    }
+                }
+                else {
+                        value_type *tmp = _allocator.allocate(__capacity);
+                        for (size_t i = 0; i < __capacity; i++)
+                        {
+                            tmp[i] = arr[i];
+                        }
+                        
+                        _allocator.deallocate(arr,__capacity);
+                        arr = _allocator.allocate(n);
+                        for (size_t i = 0; i < __capacity; i++)
+                        {
+                            arr[i] = tmp[i];
+                        }
+                        _allocator.deallocate(tmp, __capacity);
+                        __capacity =  n;
+                        while(__size < n) {
+                            
+                            arr[__size] = val;
+                            __size++;
+                        } 
+                    }
+            }
+            __size = n;
+        }
+
+        bool empty() const {
+
+            return (__size == 0);
+        }
+
+        void reserve(size_type n) {
+
+            if (n > __capacity) {
+                value_type *tmp = _allocator.allocate(__capacity);
+                for (size_t i = 0; i < __capacity; i++)
+                {
+                        tmp[i] = arr[i];
+                }
+                _allocator.deallocate(arr,__capacity);
+                arr = _allocator.allocate(n);
+                for (size_t i = 0; i < __size; i++)
+                {
+                    arr[i] = tmp[i];
+                }
+                _allocator.deallocate(tmp,__capacity);
+                __capacity = n;
+            }
+        }
+
+        void shrink_to_fit() {
+            value_type *tmp = _allocator.allocate(__capacity);
+            for (size_t i = 0; i < __capacity; i++)
+            {
+                tmp[i] = arr[i];
+            }
+            _allocator.deallocate(arr, __capacity);
+            arr = _allocator.allocate(__size);
+            for (size_t i = 0; i < __size; i++)
+            {
+                arr[i] = tmp[i];
+            }
+            _allocator.deallocate(tmp,__capacity);
+            __capacity = __size;
+        }
         // _________________/ Element access \_________________ //
 
         reference operator[](size_type n) {

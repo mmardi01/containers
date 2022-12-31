@@ -13,11 +13,11 @@ namespace ft
 		private:
 			T* ptr;
 		public:
-			typedef	std::random_access_iterator_tag iterator_category;
-			typedef T								value_type;
-			typedef ptrdiff_t 						difference_type;
-			typedef T*								pointer;
-			typedef T& 								reference;
+			typedef	std::random_access_iterator_tag 	iterator_category;
+			typedef T									value_type;
+			typedef std::ptrdiff_t 						difference_type;
+			typedef T*									pointer;
+			typedef T& 									reference;
 
 			// _________________/ Constructors \_________________ //
 
@@ -55,9 +55,15 @@ namespace ft
 			return  (ptr != x.ptr);
 		};
 
-		reference operator * () {
+		reference operator * () const {
 			
 			return *ptr;
+		}
+
+		pointer operator->() const
+		{
+
+			return &ptr;
 		}
 
 		vectorIterator& operator ++ () {
@@ -75,7 +81,6 @@ namespace ft
 
 		vectorIterator &operator--()
 		{
-
 			ptr--;
 			return *this;
 		}
@@ -83,25 +88,25 @@ namespace ft
 		vectorIterator operator--(int)
 		{
 			vectorIterator tmp = *this;
-			ptr++;
+			ptr--;
 			return tmp;
 		}
 
-		vectorIterator operator + (difference_type a) {
+		vectorIterator operator + (difference_type a) const{
 			
 			vectorIterator tmp = *this;
 			tmp.ptr += a;
 			return tmp;
 		}
 
-		vectorIterator operator-(difference_type a)
+		vectorIterator operator-(difference_type a) const
 		{
 			vectorIterator tmp = *this;
 			tmp.ptr -= a;
 			return tmp;
 		}
 
-		long int operator - (vectorIterator& x) {
+		long int operator - (vectorIterator& x) const {
 
 			return (ptr - x.ptr);
 		}
@@ -139,11 +144,19 @@ namespace ft
 			ptr -= a;
 		}
 
-		reference operator [] (size_t i) {
-
+		reference operator[](difference_type i) const
+		{
+			
 			return ptr[i];
 		}
 	};
+	template <class T>
+	vectorIterator<T> operator+(
+		typename vectorIterator<T>::difference_type n, const vectorIterator<T> &x)
+	{
+
+		return (vectorIterator<T>(x + n));
+	}
 } 
 
 
