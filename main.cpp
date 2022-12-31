@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2022/12/31 03:15:40 by mmardi           ###   ########.fr       */
+/*   Updated: 2022/12/31 21:46:08 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,40 @@
 
 int main()
 {
-	std::vector<int> myvector(100,5);
-	std::cout << "1. capacity of myvector: " << myvector.capacity() << '\n';
-	for (size_t i = 0; i < 100; i++)
+	// {
+	// 	ft::vector<int> myvector;
+	// 	myvector.push_back(1);
+	// 	myvector.push_back(2);
+	// 	myvector.push_back(3);
+	// 	myvector.push_back(4);
+	// 	myvector.push_back(5);
+	// 	ft::vector<int>::reverse_iterator firs = myvector.rbegin();
+	// 	ft::vector<int>::reverse_iterator end = myvector.rend();
+	// 	ft::vector<int> second(firs, end);
+	// 	for (size_t i = 0; i < second.size(); i++)
+	// 	{
+	// 		std::cout << second[i] << std::endl;
+	// 	}
+	// }
 	{
-		std::cout << myvector[i];
+		// std::allocator<int> a;
+		// a.allocate(-1);
+		std::vector<int> myvector;
+		myvector.push_back(5);
+		myvector.push_back(2);
+		// myvector.push_back(3);
+		// myvector.push_back(4);
+		// myvector.push_back(5);
+		std::vector<int>::iterator firs = myvector.begin();
+		// firs++;
+		std::cout << " -- " <<*firs << std::endl;
+		myvector.insert(firs, 9,9);
+		std::cout << " -- " <<*firs << std::endl;
+		// myvector.insert(firs, 9);
+		for (size_t i = 0; i < myvector.size(); i++)
+		{
+			std::cout << myvector[i] << std::endl;
+		}
+		std::cout << " -- " <<*firs << std::endl;
 	}
-	
-	myvector.resize(10);
-	std::cout << "2. capacity of myvector: " << myvector.capacity() << '\n';
-	for (size_t i = 0; i < 100; i++)
-	{
-		std::cout << myvector[i];
-	}
-	myvector.shrink_to_fit();
-	std::cout << "3. capacity of myvector: " << myvector.capacity() << '\n';
-	for (size_t i = 0; i < 100; i++)
-	{
-		std::cout <<" " <<myvector[i];
-	}
-	return 0;
 }

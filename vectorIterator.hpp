@@ -106,7 +106,7 @@ namespace ft
 			return tmp;
 		}
 
-		long int operator - (vectorIterator& x) const {
+		difference_type operator - (const vectorIterator& x) const {
 
 			return (ptr - x.ptr);
 		}

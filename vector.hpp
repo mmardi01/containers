@@ -6,12 +6,12 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2022/12/31 03:12:55 by mmardi           ###   ########.fr       */
+/*   Updated: 2022/12/31 21:30:56 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
-#define VECTOR_HP
+#define VECTOR_HPP
 #include<stdio.h>
 #include <iostream>
 #include "vectorIterator.hpp"
@@ -29,27 +29,30 @@ namespace ft
         Alloc _allocator;
         
     public:
-        typedef Alloc                                    allocator_type;
-        typedef T                                        value_type;
-        typedef typename allocator_type::reference       reference;
-        typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::pointer         pointer;
-        typedef typename allocator_type::const_pointer   const_pointer;
-        typedef vectorIterator<T>                        iterator;
-        typedef const vectorIterator<T>                  const_iterator;
-        typedef ft::reverse_iterator<iterator>           reverse_iterator;
-        typedef ft::reverse_iterator<const_iterator>     const_reverse_iterator;
-        typedef size_t                                   size_type;
+        typedef Alloc                                               allocator_type;
+        typedef T                                                   value_type;
+        typedef typename allocator_type::reference                  reference;
+        typedef typename allocator_type::const_reference            const_reference;
+        typedef typename allocator_type::pointer                    pointer;
+        typedef typename allocator_type::const_pointer              const_pointer;
+        typedef vectorIterator<T>                                   iterator;
+        typedef const vectorIterator<T>                             const_iterator;
+        typedef ft::reverse_iterator<iterator>                      reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
+        typedef typename iterator_traits<iterator>::difference_type difference_type;
+        typedef size_t                                              size_type;
 
         // _________________/ Constructors \_________________ //
-        vector(const allocator_type &alloc = allocator_type())
+        explicit vector (const allocator_type &alloc = allocator_type())
         {
             __size = 0;
             arr = NULL;
             _allocator = alloc;
             __capacity = 0;
         };
-        vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
+        
+
+        vector (size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
         {
             _allocator = alloc;
             __capacity = n;
@@ -60,7 +63,24 @@ namespace ft
                 this->arr[i] =  val;
             }
         };
-        vector(const vector& x)
+        
+        template <class InputIterator> 
+        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {
+            
+            _allocator = alloc;
+            difference_type n = last - first;
+            arr = _allocator.allocate(n);
+            __capacity = n;
+            __size = n;
+            for (size_t i = 0; first != last; first++)
+            {
+                arr[i] = *first;
+                i++;
+            }
+            
+        }
+        
+        vector (const vector& x)
         {
             _allocator = x.get_allocator();
             __size = x.size();
@@ -72,6 +92,7 @@ namespace ft
             }
             
         };
+            
         vector& operator = (const vector& x) {
             __size = x.size();
             _allocator = x.get_allocator();
@@ -306,6 +327,23 @@ namespace ft
 
         // _________________/ Modifiers \_________________ //
         
+        template <class InputIterator>
+        void assign (InputIterator first, InputIterator last) {
+            difference_type n = last - first;
+            __size = n;
+            if (__size > __capacity) {
+                _allocator.deallocate(arr,__capacity);
+                arr = _allocator.allocate(n);
+                __capacity = n;
+            }
+            for (size_t i = 0; i < __size; i++)
+            {
+                arr[i] = *first;
+                first++;
+            }
+            
+        }
+        
         void assign (size_type n, const value_type& val) {
 
            __size = n;
@@ -323,15 +361,18 @@ namespace ft
         
         void push_back (const value_type& val) {
             ft::vector<value_type> tmp;
-            if (__size == __capacity) {
+            if (__capacity == 0) { 
+                __capacity++;
+                arr = _allocator.allocate(1);
+            }
+            else if (__size == __capacity) {
                 tmp = *this;
+            std::cout << __capacity;
                 _allocator.deallocate(arr, __capacity);
                 __capacity *= 2;
                 arr = _allocator.allocate(__capacity);
                 *this = tmp;
             }
-            if (__capacity == 0) 
-                __capacity++;
             arr[__size] = val;
             __size++;
         }

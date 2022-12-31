@@ -156,14 +156,13 @@ class reverse_iterator : public std::iterator<
 
 		return (reverse_iterator<Iterator>(rev_it + n));
 	}
+	template <class Iterator>  
+	typename reverse_iterator<Iterator>::difference_type operator- (const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs) {
 
-	template <class Iterator>
-	reverse_iterator<Iterator> operator-(
-		typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator> &rev_it)
-	{
 
-		return (reverse_iterator<Iterator>(rev_it - n));
-	}
+			return ( rhs.base() - lhs.base());
+		}
+
 } // namespace ft
 
 #endif
