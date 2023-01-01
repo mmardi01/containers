@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2022/12/31 21:30:56 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/01 03:01:05 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,7 +367,6 @@ namespace ft
             }
             else if (__size == __capacity) {
                 tmp = *this;
-            std::cout << __capacity;
                 _allocator.deallocate(arr, __capacity);
                 __capacity *= 2;
                 arr = _allocator.allocate(__capacity);
@@ -379,6 +378,61 @@ namespace ft
 
         void pop_back() {
             __size--;
+        }
+        
+
+        iterator insert(iterator position, const value_type &val) {
+            
+            iterator it = this->begin();
+            size_t index = 0;
+            size_t j = 0;
+            for (; it != position; it++)
+                index++;
+            pointer tmp = _allocator.allocate(__capacity);
+            for (size_t i = 0; i < __capacity; i++)
+            {
+                tmp[i] = arr[i];
+            }
+            __size++;
+            if (__capacity == 0) {
+                __capacity++;
+                arr = _allocator.allocate(__capacity);
+                arr[0] = val;
+            }
+            else if (__capacity == __size - 1) {
+               
+                _allocator.deallocate(arr,__capacity);
+                __capacity *= 2;
+                arr = _allocator.allocate(__capacity);
+                for (size_t i = 0; i < __size; i++)
+                {
+                    if (i == index) {
+                        arr[i] = val;
+                        i++;
+                    }
+                    arr[i] = tmp[j++];
+                }
+            }
+            else {
+                for (size_t i = 0; i < __size; i++)
+                {
+                    if (i == index)
+                    {
+                        arr[i] = val;
+                        i++;
+                    }
+                    arr[i] = tmp[j++];
+                }
+            }
+            return (iterator(&arr[index]));
+        }
+
+        void insert(iterator position, size_type n, const value_type &val) {
+            iterator b = this->insert(position, val);
+            for (size_t i = 1; i < n; i++)
+            {
+                b = this->insert(b,val);
+            }
         }
 
         void clear() {

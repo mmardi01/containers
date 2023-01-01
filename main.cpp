@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2022/12/31 21:46:08 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/01 03:17:06 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,15 @@ int main()
 	{
 		// std::allocator<int> a;
 		// a.allocate(-1);
-		std::vector<int> myvector;
-		myvector.push_back(5);
-		myvector.push_back(2);
-		// myvector.push_back(3);
-		// myvector.push_back(4);
-		// myvector.push_back(5);
+		std::vector<int> myvector(10);
+		std::cout << " -- " <<myvector.capacity()<< std::endl;
 		std::vector<int>::iterator firs = myvector.begin();
-		// firs++;
-		std::cout << " -- " <<*firs << std::endl;
-		myvector.insert(firs, 9,9);
-		std::cout << " -- " <<*firs << std::endl;
-		// myvector.insert(firs, 9);
-		for (size_t i = 0; i < myvector.size(); i++)
+		myvector.insert(firs,15, 9);
+		std::cout << myvector.capacity() << std::endl;
+		for (size_t i = 0; i < myvector.capacity(); i++)
 		{
 			std::cout << myvector[i] << std::endl;
 		}
-		std::cout << " -- " <<*firs << std::endl;
+		// std::cout << " -- " <<*firs << std::endl;
 	}
 }
