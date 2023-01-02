@@ -6,7 +6,7 @@
 #    By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/27 16:51:26 by mmardi            #+#    #+#              #
-#    Updated: 2023/01/02 03:18:19 by mmardi           ###   ########.fr        #
+#    Updated: 2023/01/02 17:31:24 by mmardi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,9 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRC = main.cpp
 
-HEADER = vector.hpp vectorIterator.hpp reverse_iterator.hpp iterator_traits.hpp
+HEADER = vector.hpp vectorIterator.hpp \
+		reverse_iterator.hpp iterator_traits.hpp \
+		stack.hpp
 
 OBJ = $(SRC:.cpp=.o)
 

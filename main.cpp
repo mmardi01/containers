@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/02 03:20:54 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/02 19:57:29 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 #include <iterator> // std::iterator, std::input_iterator_tag
 #include <iostream>
 #include <vector>
+# include "stack.hpp"
+# include <algorithm>
+#include <stack>
 
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096
@@ -27,9 +30,9 @@ struct Buffer
 	char buff[BUFFER_SIZE];
 };
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
-int main()
-{
 
+int main ()
+{
 	ft::vector<std::string> vector_str;
 	ft::vector<int> vector_int;
 	ft::vector<Buffer> vector_buffer;
