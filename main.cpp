@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/01 03:17:06 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/02 02:39:18 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,21 @@
 
 int main()
 {
-	// {
-	// 	ft::vector<int> myvector;
-	// 	myvector.push_back(1);
-	// 	myvector.push_back(2);
-	// 	myvector.push_back(3);
-	// 	myvector.push_back(4);
-	// 	myvector.push_back(5);
-	// 	ft::vector<int>::reverse_iterator firs = myvector.rbegin();
-	// 	ft::vector<int>::reverse_iterator end = myvector.rend();
-	// 	ft::vector<int> second(firs, end);
-	// 	for (size_t i = 0; i < second.size(); i++)
-	// 	{
-	// 		std::cout << second[i] << std::endl;
-	// 	}
-	// }
-	{
-		// std::allocator<int> a;
-		// a.allocate(-1);
-		std::vector<int> myvector(10);
-		std::cout << " -- " <<myvector.capacity()<< std::endl;
-		std::vector<int>::iterator firs = myvector.begin();
-		myvector.insert(firs,15, 9);
-		std::cout << myvector.capacity() << std::endl;
-		for (size_t i = 0; i < myvector.capacity(); i++)
-		{
-			std::cout << myvector[i] << std::endl;
-		}
-		// std::cout << " -- " <<*firs << std::endl;
-	}
+	// unsigned int i;
+	ft::vector<int> foo(3, 100); // three ints with a value of 100
+	ft::vector<int> bar(5, 200); // five ints with a value of 200
+
+	foo.swap(bar);
+
+	std::cout << "foo contains:";
+	for (ft::vector<int>::iterator it = foo.begin(); it != foo.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	std::cout << "bar contains:";
+	for (ft::vector<int>::iterator it = bar.begin(); it != bar.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	return 0;
 }

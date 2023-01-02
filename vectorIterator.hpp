@@ -20,140 +20,55 @@ namespace ft
 			typedef T& 									reference;
 
 			// _________________/ Constructors \_________________ //
+			vectorIterator(T* s = NULL){ ptr = s; };
 
-			vectorIterator(T* s = NULL){
+			vectorIterator(const vectorIterator& x) { ptr = x.ptr; };
 
-				ptr = s;
-			};
+			vectorIterator& operator = (const vectorIterator& x) { ptr = x.ptr; return *this; };
 
-			vectorIterator(const vectorIterator& x) {
+			// _________________/ Destructor \_________________ //
+			~vectorIterator() { ptr = NULL; };
 
-				ptr = x.ptr;
-			};
+			// _________________/ Operation \_________________ //
+			bool operator == (const vectorIterator& x) const{ return (ptr == x.ptr); };
 
-			vectorIterator& operator = (const vectorIterator& x) {
+			bool operator != (const vectorIterator& x) const{ return  (ptr != x.ptr); };
 
-				ptr = x.ptr;
-				return *this;
-			};
+			reference operator * () const { return *ptr; }
 
-		// _________________/ Destructor \_________________ //
+			pointer operator->() const { return &ptr; }
 
-			~vectorIterator() {
+			vectorIterator& operator ++ () { ptr++; return *this; }
 
-				ptr = NULL;
-			};
+			vectorIterator operator++(int) { vectorIterator tmp = *this; ptr++; return tmp; }
 
+			vectorIterator &operator--() { ptr--; return *this; }
 
-		bool operator == (const vectorIterator& x) const{
-			
-			return (ptr == x.ptr);
-		};
+			vectorIterator operator--(int) { vectorIterator tmp = *this; ptr--; return tmp; }
 
-		bool operator != (const vectorIterator& x) const{
+			vectorIterator operator + (difference_type a) const{ vectorIterator tmp = *this; tmp.ptr += a; return tmp; }
 
-			return  (ptr != x.ptr);
-		};
+			vectorIterator operator-(difference_type a) const { vectorIterator tmp = *this; tmp.ptr -= a; return tmp; }
 
-		reference operator * () const {
-			
-			return *ptr;
-		}
+			difference_type operator - (const vectorIterator& x) const { return (ptr - x.ptr); }
 
-		pointer operator->() const
-		{
+			bool operator < (const vectorIterator& x) const{ return (ptr < x.ptr); }
 
-			return &ptr;
-		}
+			bool operator > (const vectorIterator &x) const { return (ptr > x.ptr); }
 
-		vectorIterator& operator ++ () {
+			bool operator <= (const vectorIterator &x) const { return (ptr <= x.ptr); }
 
-			ptr++;
-			return *this;
-		}
+			bool operator >= (const vectorIterator &x) const { return (ptr >= x.ptr); }
 
-		vectorIterator operator++(int)
-		{
-			vectorIterator tmp = *this;
-			ptr++;
-			return tmp;
-		}
+			void operator += (difference_type a) { ptr += a; }
 
-		vectorIterator &operator--()
-		{
-			ptr--;
-			return *this;
-		}
+			void operator -= (difference_type a) { ptr -= a; }
 
-		vectorIterator operator--(int)
-		{
-			vectorIterator tmp = *this;
-			ptr--;
-			return tmp;
-		}
-
-		vectorIterator operator + (difference_type a) const{
-			
-			vectorIterator tmp = *this;
-			tmp.ptr += a;
-			return tmp;
-		}
-
-		vectorIterator operator-(difference_type a) const
-		{
-			vectorIterator tmp = *this;
-			tmp.ptr -= a;
-			return tmp;
-		}
-
-		difference_type operator - (const vectorIterator& x) const {
-
-			return (ptr - x.ptr);
-		}
-
-		bool operator < (const vectorIterator& x) const{
-
-			return (ptr < x.ptr);
-		}
-
-		bool operator > (const vectorIterator &x) const 
-		{
-
-			return (ptr > x.ptr);
-		}
-
-		bool operator <= (const vectorIterator &x) const
-		{
-
-			return (ptr <= x.ptr);
-		}
-
-		bool operator >= (const vectorIterator &x) const
-		{
-
-			return (ptr >= x.ptr);
-		}
-
-		void operator += (difference_type a) {
-
-			ptr += a;
-		}
-		void operator -= (difference_type a)
-		{
-
-			ptr -= a;
-		}
-
-		reference operator[](difference_type i) const
-		{
-			
-			return ptr[i];
-		}
+			reference operator[](difference_type i) const { return ptr[i]; }
 	};
 	template <class T>
 	vectorIterator<T> operator+(
-		typename vectorIterator<T>::difference_type n, const vectorIterator<T> &x)
-	{
+		typename vectorIterator<T>::difference_type n, const vectorIterator<T> &x) {
 
 		return (vectorIterator<T>(x + n));
 	}
