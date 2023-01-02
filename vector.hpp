@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/02 02:39:05 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/02 03:20:17 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,8 @@ namespace ft
         size_type max_size() const { return (_allocator.max_size()); }
 
         size_type capacity() const { return __capacity; };
+        
+        bool empty() const {  return (__size == 0); }
 
         void resize(size_type n, value_type val = value_type()) {
 
@@ -173,8 +175,6 @@ namespace ft
             }
             __size = n;
         }
-
-        bool empty() const {  return (__size == 0); }
 
         void reserve(size_type n) {
 
@@ -215,9 +215,21 @@ namespace ft
 
         const_reference operator[](size_type n) const { return arr[n]; };
 
-        reference at(size_type n) { return arr[n];} ;
+        reference at(size_type n) { 
+            if (n >= __size){
+                // std::string err = "vector::_M_range_check: __n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(__size) + ")";
+                throw std::out_of_range("index out of range");
+            }
+            return arr[n];
+        } ;
 
-        const_reference at(size_type n) const { return arr[n]; };
+        const_reference at(size_type n) const {
+            if (n >= __size){
+                // std::string err = "vector::_M_range_check: __n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(__size) + ")";
+                throw std::out_of_range("index out of range");
+            }
+            return arr[n]; 
+        };
 
         reference front() { return arr[0]; };
         
@@ -412,11 +424,9 @@ namespace ft
             return iterator(&arr[index]);
         }
 
-        void clear() { __size = 0; }
-
         void swap(vector &x) {
-            value_type tmpSize = __size;
-            value_type tmpCapacity = __capacity;
+            size_t tmpSize = __size;
+            size_t tmpCapacity = __capacity;
             Alloc tmpAllocator = _allocator;
             T* tmpArr = arr;
             
@@ -431,10 +441,12 @@ namespace ft
             x.arr = tmpArr;
         }
 
+        void clear() { __size = 0; }
         // _________________/ Allocator \_________________ //
         allocator_type get_allocator() const { return _allocator; };
     };
-    
+
+    // _________________/ Non-member function overloads \_________________ //
     template <class T, class Alloc>
     bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
         for (size_t i = 0; i < lhs.size() && i < rhs.size(); i++)

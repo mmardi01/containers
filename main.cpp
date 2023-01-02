@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/02 02:39:18 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/02 03:20:54 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,47 @@
 #include <iostream>
 #include <vector>
 
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
+{
+	int idx;
+	char buff[BUFFER_SIZE];
+};
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
 int main()
 {
-	// unsigned int i;
-	ft::vector<int> foo(3, 100); // three ints with a value of 100
-	ft::vector<int> bar(5, 200); // five ints with a value of 200
 
-	foo.swap(bar);
+	ft::vector<std::string> vector_str;
+	ft::vector<int> vector_int;
+	ft::vector<Buffer> vector_buffer;
 
-	std::cout << "foo contains:";
-	for (ft::vector<int>::iterator it = foo.begin(); it != foo.end(); ++it)
-		std::cout << ' ' << *it;
-	std::cout << '\n';
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
 
-	std::cout << "bar contains:";
-	for (ft::vector<int>::iterator it = bar.begin(); it != bar.end(); ++it)
-		std::cout << ' ' << *it;
-	std::cout << '\n';
+	for (int i = 0; i < COUNT; i++)
+	{
+		const int idx = rand() % COUNT;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::vector<Buffer>().swap(vector_buffer);
 
-	return 0;
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" << std::endl;
+		}
+	}
+	catch (const std::exception &e)
+	{
+	}
+
+
+	std::cout << std::endl;
+	return (0);
 }
