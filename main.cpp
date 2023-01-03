@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/03 19:08:56 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/03 20:26:39 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ bool mypredicate (int i, int j) {
 int main () {
   int myints[] = {20,40,60,80,100};               //   myints: 20 40 60 80 100
   ft::vector<int>myvector (myints,myints+5);     // myvector: 20 40 60 80 100
+
+	std::pair <int,int> aor;
 
   // using default comparison:
   if ( std::equal (myvector.begin(), myvector.end(), myints) )
