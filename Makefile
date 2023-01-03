@@ -6,7 +6,7 @@
 #    By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/27 16:51:26 by mmardi            #+#    #+#              #
-#    Updated: 2023/01/03 16:16:29 by mmardi           ###   ########.fr        #
+#    Updated: 2023/01/03 18:45:28 by mmardi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC = main.cpp
 
 HEADER = vector.hpp vectorIterator.hpp \
 		reverse_iterator.hpp iterator_traits.hpp \
-		stack.hpp
+		stack.hpp equal.hpp enable_if.hpp is_integral.hpp
 
 OBJ = $(SRC:.cpp=.o)
 

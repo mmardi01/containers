@@ -70,7 +70,9 @@
     "ratio": "cpp",
     "sstream": "cpp",
     "__functional_03": "cpp",
-    "stack": "cpp"
+    "stack": "cpp",
+    "__tree": "cpp",
+    "map": "cpp"
   },
   "42header.username": "mmardi",
   "42header.email": "mmardi@student.42.fr"

@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/03 16:21:09 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/03 19:10:28 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ namespace ft
 
         explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
         {
+            puts("hna");
             _allocator = alloc;
             __capacity = n;
             __size = n;
@@ -66,8 +67,8 @@ namespace ft
             }
         };
         
-        template <class InputIterator, typename ft::enable_if<ft::is_integral<T>::value>::type> 
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {
+        template <class InputIterator>
+        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!std::is_integral<InputIterator>::value>::type = 0) {
             _allocator = alloc;
             difference_type n = last - first;
             arr = _allocator.allocate(n);
@@ -75,7 +76,7 @@ namespace ft
             __size = n;
             for (size_t i = 0; first != last; first++)
             {
-                _allocator.construct(&arr[i], first);
+                arr[i] = *first;
                 i++;
             }
             
@@ -351,7 +352,7 @@ namespace ft
         }
         
         template <class InputIterator>
-        void insert(iterator position, InputIterator first, InputIterator last) {
+        void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!std::is_integral<InputIterator>::value>::type = 0) {
             iterator it = this->begin();
             difference_type n = last - first;
             size_t index = 0;
