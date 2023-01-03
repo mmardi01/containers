@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/02 03:20:17 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/03 16:21:09 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include "vectorIterator.hpp"
 #include "reverse_iterator.hpp"
 # include <algorithm>
+# include "is_integral.hpp"
+# include "enable_if.hpp"
+
 
 namespace ft
 {
@@ -63,21 +66,20 @@ namespace ft
             }
         };
         
-        // template <class InputIterator> 
-        // vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {
+        template <class InputIterator, typename ft::enable_if<ft::is_integral<T>::value>::type> 
+        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {
+            _allocator = alloc;
+            difference_type n = last - first;
+            arr = _allocator.allocate(n);
+            __capacity = n;
+            __size = n;
+            for (size_t i = 0; first != last; first++)
+            {
+                _allocator.construct(&arr[i], first);
+                i++;
+            }
             
-        //     _allocator = alloc;
-        //     difference_type n = last - first;
-        //     arr = _allocator.allocate(n);
-        //     __capacity = n;
-        //     __size = n;
-        //     for (size_t i = 0; first != last; first++)
-        //     {
-        //         _allocator.construct(&arr[i], first);
-        //         i++;
-        //     }
-            
-        // }
+        }
         
         vector (const vector& x)
         {
@@ -244,7 +246,7 @@ namespace ft
         const value_type* data() const throw() { return &arr[0]; };
 
         // _________________/ Modifiers \_________________ //
-        template <class InputIterator>
+        template <class InputIterator,  typename ft::enable_if<ft::is_integral<T>::value>::type>
         void assign (InputIterator first, InputIterator last) {
             difference_type n = last - first;
             __size = n;

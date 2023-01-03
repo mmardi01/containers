@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   enable_if.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/03 16:19:58 by mmardi           ###   ########.fr       */
+/*   Created: 2023/01/03 15:53:47 by mmardi            #+#    #+#             */
+/*   Updated: 2023/01/03 16:14:24 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.hpp"
-#include "reverse_iterator.hpp"
-#include <vector>
-# include <cstdlib>
-#include <memory>
-#include <iterator> // std::iterator, std::input_iterator_tag
-#include <iostream>
-#include <vector>
-# include "stack.hpp"
-# include <algorithm>
-#include <stack>
-# include "enable_if.hpp"
 
-int main ()
+#ifndef ENABLE_IF
+#define ENABLE_IF
+
+namespace ft
 {
-	ft::vector<int> a(10, 20);
+    template <bool Cond, class T = int> 
+    struct enable_if {
+        
+    };
+    
+    template <class T> 
+    struct enable_if<true,T> {
+        typedef T type;
+    };
+} // namespace ft
 
-}
+
+# endif
