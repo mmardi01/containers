@@ -6,12 +6,13 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:56:58 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/03 16:04:00 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/04 00:38:21 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IS_INTEGRAL
 #define IS_INTEGRAL
+
 
 namespace ft
 {
@@ -34,17 +35,17 @@ namespace ft
         static const bool value = true;
     };
 
-     template <> 
-    struct is_integral<char16_t> {
+    //  template <> 
+    // struct is_integral< char16_t > {
         
-        static const bool value = true;
-    };
+    //     static const bool value = true;
+    // };
 
-     template <> 
-    struct is_integral<char32_t> {
+    //  template <> 
+    // struct is_integral< char32_t > {
         
-        static const bool value = true;
-    };
+    //     static const bool value = true;
+    // };
 
      template <> 
     struct is_integral<wchar_t> {

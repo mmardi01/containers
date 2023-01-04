@@ -20,7 +20,7 @@ namespace ft
 			typedef T& 									reference;
 
 			// _________________/ Constructors \_________________ //
-			vectorIterator(T* s = NULL){ ptr = s; };
+			vectorIterator(T *s = NULL) { ptr = s; };
 
 			vectorIterator(const vectorIterator& x) { ptr = x.ptr; };
 

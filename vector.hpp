@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/03 19:10:28 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/04 00:39:29 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ namespace ft
         };
         
         template <class InputIterator>
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!std::is_integral<InputIterator>::value>::type = 0) {
+        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0) {
             _allocator = alloc;
             difference_type n = last - first;
             arr = _allocator.allocate(n);
@@ -247,8 +247,9 @@ namespace ft
         const value_type* data() const throw() { return &arr[0]; };
 
         // _________________/ Modifiers \_________________ //
-        template <class InputIterator,  typename ft::enable_if<ft::is_integral<T>::value>::type>
-        void assign (InputIterator first, InputIterator last) {
+        template <class InputIterator>
+        void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0)
+        {
             difference_type n = last - first;
             __size = n;
             if (__size > __capacity) {
@@ -261,9 +262,8 @@ namespace ft
                 _allocator.construct(&arr[i], *first);
                 first++;
             }
-            
         }
-        
+
         void assign (size_type n, const value_type& val) {
 
            __size = n;
@@ -352,7 +352,7 @@ namespace ft
         }
         
         template <class InputIterator>
-        void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!std::is_integral<InputIterator>::value>::type = 0) {
+        void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0) {
             iterator it = this->begin();
             difference_type n = last - first;
             size_t index = 0;
