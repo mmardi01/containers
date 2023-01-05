@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/04 02:20:25 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/05 22:51:07 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,23 @@
 #include <stack>
 # include "enable_if.hpp"
 # include "pair.hpp"
+# include "redBlackTree.hpp"
 
 int main()
 {
-  ft::pair<std::string, int> planet, homeplanet;
-
-  planet = ft::make_pair("Earth", 6371);
-
-  homeplanet = planet;
-
-  std::cout << "Home planet: " << homeplanet.first << '\n';
-  std::cout << "Planet size: " << homeplanet.second << '\n';
-  return 0;
+  Node<int> *a = new Node<int>(5);
+  Node<int> *s = new Node<int>(9);
+  Node<int> *bcmp = new Node<int>(4);
+  Node<int> *bcmp2 = new Node<int>(3);
+  RedBlackTree<int> b;
+  b.insert(a);
+  b.insert(bcmp);
+  b.insert(bcmp2);
+  b.insert(s);
+  Node<int>* tmp = a;
+  while(tmp) {
+    std::cout << tmp->data << std::endl;
+    tmp = tmp->left;
+  }
+  
 }
