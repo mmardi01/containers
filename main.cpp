@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/06 14:28:44 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/08 17:06:57 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int main()
   b.insert(s);
   b.insert(k);
   b.insert(d);
+  b.deleteNode(bcmp);
   std::cout <<"value: " <<bcmp->data<<  " color: "<< bcmp->color <<std::endl;
   std::cout <<"value: " <<bcmp->right->data<<  " color: "<< bcmp->right->color <<std::endl;
   std::cout <<"value: " <<bcmp->right->right->data<<  " color: "<< bcmp->right->right->color <<std::endl;

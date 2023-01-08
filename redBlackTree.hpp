@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/06 15:07:41 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/08 20:54:47 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,13 @@ class RedBlackTree {
       node->parent = x;
     }
 
-
-
+    _Node minimum(_Node x) {
+      _Node node = x;
+      while(node->left != NULL) 
+        node = node->left;
+      return node;
+        
+    }
     
     // insert fixer
     void insertFixer(_Node node) {
@@ -122,6 +127,17 @@ class RedBlackTree {
       }
     }
    ////////////////insert fixer 
+  void transplant(_Node u, _Node v) {
+    if (u->parent == NULL) {
+      root = v;
+    } else if (u == u->parent->left) {
+      u->parent->left = v;
+    } else {
+      u->parent->right = v;
+    }
+    v->parent = u->parent;
+  }
+
   public:
     RedBlackTree() : root(nullptr) , _null(nullptr) {}
     void insert(_Node _newNode) {
@@ -149,6 +165,50 @@ class RedBlackTree {
 
         insertFixer(_newNode);
       }
+    }
+
+    void deleteNode(_Node d_node) {
+
+      _Node x = this->root;
+      _Node y;
+      while(x != d_node) {
+        if (d_node->data >= x->data)
+          x =  x->right;
+        else 
+          x = x->left;
+        if (!x) {
+          std::cout << "node not found\n";
+          return;
+        }
+      }
+      int o_color = x->color;
+      if (!x->left) {
+        y = x->right;
+        transplant(x, x->right);
+      }
+      else if(!x->right) {
+        y = x->left;
+        transplant(x, x->left);
+      }
+      else {
+        _Node min = minimum(x->right);
+        o_color = min->color;
+        y = min->right;
+        if (min->parent == x){
+          y->parent =  min;}
+        else{
+          transplant(min, min->right);
+          min->right = x->right;
+          min->right->parent = min;
+        }
+        transplant(x,min);
+        min->left = x->left;
+        min->left->parent = y;
+        min->color = o_color;
+      }
+      // if (o_color == 0) {
+      //   // deleteFix(y);
+      // }
     }
 };
 
