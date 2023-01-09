@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/08 17:06:57 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/09 03:28:32 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,16 @@ int main()
   Node<int> *k = new Node<int>(2);
   Node<int> *d = new Node<int>(1);
   RedBlackTree<int> b;
-  b.insert(a);
-  b.insert(bcmp);
-  b.insert(bcmp2);
-  b.insert(s);
-  b.insert(k);
-  b.insert(d);
-  b.deleteNode(bcmp);
-  std::cout <<"value: " <<bcmp->data<<  " color: "<< bcmp->color <<std::endl;
-  std::cout <<"value: " <<bcmp->right->data<<  " color: "<< bcmp->right->color <<std::endl;
-  std::cout <<"value: " <<bcmp->right->right->data<<  " color: "<< bcmp->right->right->color <<std::endl;
-  std::cout <<"value: " <<bcmp->left->data<<  " color: "<< bcmp->left->color <<std::endl;
-  std::cout <<"value: " <<bcmp->left->right->data<<  " color: "<< bcmp->left->right->color <<std::endl;
-  std::cout <<"value: " <<bcmp->left->left->data<<  " color: "<< bcmp->left->left->color <<std::endl;
-  
-  
+  b.insert(a); //5
+  b.insert(bcmp); // 4
+  b.insert(bcmp2); // 3
+  b.insert(s); // 9
+  b.insert(k); // 2
+  b.insert(d); // 1
+
+  b.deleteNode(k);
+  std::cout << b.root->data << " color: " << b.root->color << std::endl;
+  std::cout << b.root->left->data << " color: " << b.root->left->color << std::endl;
+  // std::cout << b.root->left->left->data << " color: " << b.root->left->left->color << std::endl;
+  // std::cout << b.root->left->right->data << " color: " << b.root->left->right->color << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/08 20:54:47 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/09 03:26:32 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ struct Node {
   Node *left;
   Node *right;
   int color;
-  Node() :  parent(nullptr) ,left(nullptr) ,right(nullptr),  color(1) {}
-  Node(const T &val) : data(val), parent(nullptr) ,left(nullptr) ,right(nullptr),  color(1) {}
+  Node() :  parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
+  Node(const T &val) : data(val), parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
 };
 
 
@@ -71,7 +71,7 @@ class RedBlackTree {
 
     _Node minimum(_Node x) {
       _Node node = x;
-      while(node->left != NULL) 
+      while (node->left != _null)
         node = node->left;
       return node;
         
@@ -127,25 +127,115 @@ class RedBlackTree {
       }
     }
    ////////////////insert fixer 
+
+   void deleteFixer(_Node x) {
+      _Node s;
+      while (x != root && x->color == 0)
+      {
+        if (x == x->parent->left)
+        {
+            s = x->parent->right;
+            if (s->color == 1)
+            {
+              s->color = 0;
+              x->parent->color = 1;
+              leftRotate(x->parent);
+              s = x->parent->right;
+            }
+
+            if (s->left->color == 0 && s->right->color == 0)
+            {
+              s->color = 1;
+              x = x->parent;
+            }
+            else
+            {
+              if (s->right->color == 0)
+              {
+                s->left->color = 0;
+                s->color = 1;
+                rightRotate(s);
+                s = x->parent->right;
+              }
+
+              s->color = x->parent->color;
+              x->parent->color = 0;
+              s->right->color = 0;
+              leftRotate(x->parent);
+              x = root;
+            }
+        }
+        else
+        {
+            s = x->parent->left;
+            if (s->color == 1)
+            {
+              s->color = 0;
+              x->parent->color = 1;
+              rightRotate(x->parent);
+              s = x->parent->left;
+            }
+
+            if (s->right->color == 0 && s->right->color == 0)
+            {
+              s->color = 1;
+              x = x->parent;
+            }
+            else
+            {
+              if (s->left->color == 0)
+              {
+                s->right->color = 0;
+                s->color = 1;
+                leftRotate(s);
+                s = x->parent->left;
+              }
+
+              s->color = x->parent->color;
+              x->parent->color = 0;
+              s->left->color = 0;
+              rightRotate(x->parent);
+              x = root;
+            }
+        }
+      }
+      x->color = 0;
+   }
+
+   
   void transplant(_Node u, _Node v) {
-    if (u->parent == NULL) {
-      root = v;
-    } else if (u == u->parent->left) {
-      u->parent->left = v;
-    } else {
-      u->parent->right = v;
-    }
+      if (u->parent == _null)
+      {
+        root = v;
+      }
+      else if (u == u->parent->left)
+      {
+        u->parent->left = v;
+      }
+      else
+      {
+        u->parent->right = v;
+      }
+
     v->parent = u->parent;
   }
 
   public:
-    RedBlackTree() : root(nullptr) , _null(nullptr) {}
+    RedBlackTree() : root(NULL)  {
+    _null = new Node<T>;
+    _null->color = 0;
+    _null->left = nullptr;
+    _null->right = nullptr;
+    }
     void insert(_Node _newNode) {
-      _Node x = this->root;
-      _Node y = _null;
-      if (root == nullptr) {
-        _newNode->color = 0;
-        root = _newNode;
+    _newNode->left = _null;
+    _newNode->right = _null;
+    _Node x = this->root;
+    _Node y = _null;
+    if (root == NULL)
+    {
+      _newNode->color = 0;
+      root = _newNode;
       }
       else {
         while(x != _null) {
@@ -168,25 +258,26 @@ class RedBlackTree {
     }
 
     void deleteNode(_Node d_node) {
-
       _Node x = this->root;
       _Node y;
+
       while(x != d_node) {
         if (d_node->data >= x->data)
           x =  x->right;
         else 
           x = x->left;
-        if (!x) {
+        if (x == _null) {
           std::cout << "node not found\n";
           return;
         }
       }
       int o_color = x->color;
-      if (!x->left) {
+      if (x->left == _null) {
         y = x->right;
         transplant(x, x->right);
       }
-      else if(!x->right) {
+      else if (x->right == _null)
+      {
         y = x->left;
         transplant(x, x->left);
       }
@@ -206,9 +297,10 @@ class RedBlackTree {
         min->left->parent = y;
         min->color = o_color;
       }
-      // if (o_color == 0) {
-      //   // deleteFix(y);
-      // }
+      delete x;
+      if (o_color == 0) {
+        deleteFixer(y);
+      }
     }
 };
 

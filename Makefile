@@ -6,13 +6,13 @@
 #    By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/27 16:51:26 by mmardi            #+#    #+#              #
-#    Updated: 2023/01/05 22:48:40 by mmardi           ###   ########.fr        #
+#    Updated: 2023/01/09 02:57:33 by mmardi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =   containers
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+CFLAGS = -Wall -Wextra -Werror ##-std=c++98
 
 SRC = main.cpp
 
