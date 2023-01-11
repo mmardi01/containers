@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/09 03:26:32 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/11 17:05:13 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,284 +24,261 @@ struct Node {
   Node(const T &val) : data(val), parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
 };
 
-
-template <class T>
+template <class T> 
 class RedBlackTree {
   public:
     typedef Node<T>* _Node;
     _Node root;
   private:
-    _Node _null;
+    _Node _nil;
 
-    // rotations
-    void leftRotate(_Node node) {
-      _Node x = node->right;
-      node->left = x->left;
-      if (x->left) {
-        x->left->parent = node;
-      }
-      x->parent = node->parent;
-      if (!node->parent)
-        root = x;
-      else if (node == node->parent->left) 
-        node->parent->left = x;
+    void leftRotate(_Node x)
+    {
+      _Node y = x->right;
+      x->right = y->left;
+      if (y->left != _nil)
+        y->left->parent = x;
+      y->parent = x->parent;
+      if (x->parent == nullptr)
+        this->root = y;
+      else if (x == x->parent->left)
+        x->parent->left = y;
       else
-        node->parent->right = x;
-      x->left = node;
-      node->parent = x;
-        
+        x->parent->right = y;
+      y->left = x;
+      x->parent = y;
     }
 
-     void rightRotate(_Node node) {
-      _Node x = node->left;
-      node->left = x->right;
-      if (x->right) {
-        x->right->parent = node;
-      }
-      x->parent = node->parent;
-      if (!node->parent)
-        root = x;
-      else if (node == node->parent->right) 
-        node->parent->right = x;
+    void Transplant(_Node d_node, _Node node) {
+
+      if (!d_node->parent)
+        this->root = node;
+      else if (d_node == d_node->parent->right)
+        d_node->parent->right = node;
       else
-        node->parent->left = x;
-      x->right = node;
-      node->parent = x;
+        d_node->parent->left = node;
+      node->parent = d_node->parent;     
     }
 
-    _Node minimum(_Node x) {
+    _Node getMinNode(_Node x) {
       _Node node = x;
-      while (node->left != _null)
+      while(node->left != _nil)
         node = node->left;
       return node;
-        
     }
-    
-    // insert fixer
-    void insertFixer(_Node node) {
-      if (node->parent->color == 0) {
-        
-        return;
+
+    void  rightRotate(_Node x)
+    {
+      _Node y = x->left;
+      x->left = y->right;
+      if (y->right != _nil)
+        y->right->parent = x;
+      y->parent = x->parent;
+      if (x->parent == NULL)
+        this->root = y;
+      else if (x == x->parent->right)
+        x->parent->right = y;
+      else
+        x->parent->left = y;
+      y->right = x;
+      x->parent = y;
+    }
+  void inserHandler(_Node node) {
+    if (node->parent->color == 0)
+      return;
+    while (node->color == 1 && node->parent->color == 1) {
+      if (node->parent == node->parent->parent->left) {
+        if (node->parent->parent->right->color == 1) {
+
+          node->parent->color = 0;
+          node->parent->parent->right->color = 0;
+          node->parent->parent->color = 1;
+          node = node->parent->parent;
+        }
+        else {
+          if (node == node->parent->right) {
+            node = node->parent;
+            leftRotate(node);
+          }
+          node->parent->color = 0;
+          node->parent->parent->color = 1;
+          rightRotate(node->parent->parent);
+        }
       }
       else {
-        while (node->parent->color == 1) {
-
-            if (node->parent->parent->left == node->parent) {
-              if (node->parent->parent->right && node->parent->parent->right->color == 1) {
-                node->parent->color = 0;
-                node->parent->parent->right->color = 0;
-                node->parent->parent->color = 1;
-                node = node->parent->parent;
-              }
-              else {
-                if (node == node->parent->right) {
-                  node = node->parent;
-                  leftRotate(node);
-                }
-                node->parent->color = 0;
-                node->parent->parent->color = 1;
-                rightRotate(node->parent->parent);
-              }
-            }
-            else {
-              if (node->parent->parent->left && node->parent->parent->left->color == 1) {
-                node->parent->color = 0;
-                node->parent->parent->left->color = 0;
-                node->parent->parent->color = 1;
-                node = node->parent->parent;
-              }
-              else {
-                if (node == node->parent->left) {
-                  node = node->parent;
-                  rightRotate(node);
-                }
-                node->parent->color = 0;
-                node->parent->parent->color = 1;
-                leftRotate(node->parent->parent);
-              }
-            }
-            if (node == this->root)
-              break ;
+        if (node->parent->parent->left->color == 1) {
+          node->parent->color = 0;
+          node->parent->parent->left->color = 0;
+          node->parent->parent->color = 1;
+          node = node->parent->parent;
         }
-        root->color = 0;
+         else {
+          if (node == node->parent->right) {
+            node = node->parent;
+            rightRotate(node);
+          }
+          node->parent->color = 0;
+          node->parent->parent->color = 1;
+          leftRotate(node->parent->parent);
+        }
+      }
+      if (node == this->root) {
+        break;
       }
     }
-   ////////////////insert fixer 
+    this->root->color = 0;
+  }
 
-   void deleteFixer(_Node x) {
-      _Node s;
-      while (x != root && x->color == 0)
-      {
-        if (x == x->parent->left)
+
+  void deleteHandler(_Node x) {
+    _Node s;
+    while(x != root && x->color == 0) {
+      if (x == x->parent->left) {
+        s = x->parent->right;
+        if (s->color == 1) {
+          s->parent->color = 1;
+          s->color = 0;
+          leftRotate(x->parent);
+          s = x->parent->right;
+        }
+
+        if (s->left->color == 0 && s->right->color == 0) {
+          s->color = 1;
+          x = x->parent;
+        }
+        else {
+          if (s->right->color == 0) {
+            s->color = 1;
+            s->left->color = 0;
+            rightRotate(s);
+            s = x->parent->right;        
+          }
+          s->color = x->parent->color;
+          s->right->color = 0;
+          x->parent->color = 0;
+          leftRotate(x->parent);
+          x = root;
+        }
+      }
+      else {
+        s = x->parent->left;
+        if (s->color == 1)
         {
-            s = x->parent->right;
-            if (s->color == 1)
-            {
-              s->color = 0;
-              x->parent->color = 1;
-              leftRotate(x->parent);
-              s = x->parent->right;
-            }
+          s->parent->color = 1;
+          s->color = 0;
+          rightRotate(x->parent);
+          s = x->parent->left;
+        }
 
-            if (s->left->color == 0 && s->right->color == 0)
-            {
-              s->color = 1;
-              x = x->parent;
-            }
-            else
-            {
-              if (s->right->color == 0)
-              {
-                s->left->color = 0;
-                s->color = 1;
-                rightRotate(s);
-                s = x->parent->right;
-              }
-
-              s->color = x->parent->color;
-              x->parent->color = 0;
-              s->right->color = 0;
-              leftRotate(x->parent);
-              x = root;
-            }
+        if (s->left->color == 0 && s->right->color == 0)
+        {
+          s->color = 1;
+          x = x->parent;
         }
         else
         {
+          if (s->left->color == 0)
+          {
+            s->color = 1;
+            s->right->color = 0;
+            leftRotate(s);
             s = x->parent->left;
-            if (s->color == 1)
-            {
-              s->color = 0;
-              x->parent->color = 1;
-              rightRotate(x->parent);
-              s = x->parent->left;
-            }
-
-            if (s->right->color == 0 && s->right->color == 0)
-            {
-              s->color = 1;
-              x = x->parent;
-            }
-            else
-            {
-              if (s->left->color == 0)
-              {
-                s->right->color = 0;
-                s->color = 1;
-                leftRotate(s);
-                s = x->parent->left;
-              }
-
-              s->color = x->parent->color;
-              x->parent->color = 0;
-              s->left->color = 0;
-              rightRotate(x->parent);
-              x = root;
-            }
+          }
+          s->color = x->parent->color;
+          s->left->color = 0;
+          x->parent->color = 0;
+          rightRotate(x->parent);
+          x = root;
         }
       }
-      x->color = 0;
-   }
-
-   
-  void transplant(_Node u, _Node v) {
-      if (u->parent == _null)
-      {
-        root = v;
-      }
-      else if (u == u->parent->left)
-      {
-        u->parent->left = v;
-      }
-      else
-      {
-        u->parent->right = v;
-      }
-
-    v->parent = u->parent;
-  }
-
-  public:
-    RedBlackTree() : root(NULL)  {
-    _null = new Node<T>;
-    _null->color = 0;
-    _null->left = nullptr;
-    _null->right = nullptr;
     }
-    void insert(_Node _newNode) {
-    _newNode->left = _null;
-    _newNode->right = _null;
-    _Node x = this->root;
-    _Node y = _null;
-    if (root == NULL)
-    {
-      _newNode->color = 0;
-      root = _newNode;
+    x->color = 0;
+  }
+    
+  public:
+    RedBlackTree() {
+      _nil = new Node<T>;
+      _nil->color = 0;
+      root = nullptr;
+    }
+    
+    void insert(_Node newNode) {
+      newNode->left = _nil;
+      newNode->right = _nil;
+      if (!root) {
+        this->root = newNode;
+        this->root->color = 0;
       }
       else {
-        while(x != _null) {
-          y = x; 
-          if (_newNode->data >= x->data) {
-            x = x->right;
+        _Node tmp = this->root;
+        _Node parent;
+        bool r;
+        while(tmp != _nil) {
+          parent = tmp;
+          if (tmp->data <= newNode->data) {
+            r = true; 
+            tmp = tmp->right;
           }
-          else {
-            x = x->left;
+          else  {
+            r = false; 
+            tmp = tmp->left;
           }
         }
-        _newNode->parent = y;
-        if (_newNode->data >= y->data)
-          y->right = _newNode;
-        else  
-          y->left = _newNode;
-
-        insertFixer(_newNode);
+        newNode->parent = parent;
+        if (r)
+          parent->right = newNode;
+        else
+          parent->left = newNode;
+        
+        inserHandler(newNode);  
       }
     }
 
     void deleteNode(_Node d_node) {
+      
       _Node x = this->root;
-      _Node y;
-
-      while(x != d_node) {
+      _Node toFix;
+      _Node min;
+      while(x !=  d_node)
+      {
         if (d_node->data >= x->data)
-          x =  x->right;
-        else 
+          x = x->right;
+        else
           x = x->left;
-        if (x == _null) {
+        if (x == _nil) {
           std::cout << "node not found\n";
           return;
         }
       }
       int o_color = x->color;
-      if (x->left == _null) {
-        y = x->right;
-        transplant(x, x->right);
+      if (x->left == _nil) {
+        toFix = x->right;
+        Transplant(x, x->right);
       }
-      else if (x->right == _null)
-      {
-        y = x->left;
-        transplant(x, x->left);
+      else if (x->right == _nil) {
+        toFix = x->left;
+        Transplant(x, x->left);
       }
       else {
-        _Node min = minimum(x->right);
+        min = getMinNode(x->right);
         o_color = min->color;
-        y = min->right;
-        if (min->parent == x){
-          y->parent =  min;}
-        else{
-          transplant(min, min->right);
+        toFix = min->right;
+        if (min->parent == x)
+          toFix->parent = min;
+        else {
+          
+          Transplant(min,min->right);
           min->right = x->right;
           min->right->parent = min;
         }
-        transplant(x,min);
+        Transplant(x,min);
         min->left = x->left;
-        min->left->parent = y;
-        min->color = o_color;
+        min->left->parent = min;
+        min->color = x->color;
       }
       delete x;
-      if (o_color == 0) {
-        deleteFixer(y);
-      }
+      if (o_color == 0)
+        deleteHandler(toFix);
     }
 };
-
 #endif

@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/09 03:28:32 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/11 17:12:11 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,25 @@
 
 int main()
 {
-  Node<int> *a = new Node<int>(5);
-  Node<int> *s = new Node<int>(9);
-  Node<int> *bcmp = new Node<int>(4);
-  Node<int> *bcmp2 = new Node<int>(3);
-  Node<int> *k = new Node<int>(2);
-  Node<int> *d = new Node<int>(1);
-  RedBlackTree<int> b;
-  b.insert(a); //5
-  b.insert(bcmp); // 4
-  b.insert(bcmp2); // 3
-  b.insert(s); // 9
-  b.insert(k); // 2
-  b.insert(d); // 1
-
-  b.deleteNode(k);
-  std::cout << b.root->data << " color: " << b.root->color << std::endl;
-  std::cout << b.root->left->data << " color: " << b.root->left->color << std::endl;
-  // std::cout << b.root->left->left->data << " color: " << b.root->left->left->color << std::endl;
-  // std::cout << b.root->left->right->data << " color: " << b.root->left->right->color << std::endl;
+  Node<int> *a = new Node<int>(10);
+  Node<int> *b = new Node<int>(11);
+  Node<int> *c = new Node<int>(9);
+  Node<int> *d = new Node<int>(9);
+  Node<int> *e = new Node<int>(12);
+  Node<int> *f = new Node<int>(10);
+  Node<int> *g = new Node<int>(10);
+  RedBlackTree<int> tree;
+  tree.insert(a);
+  tree.insert(b);
+  tree.insert(c);
+  tree.insert(d);
+  tree.insert(e);
+  tree.insert(f);
+  tree.insert(g);
+  tree.deleteNode(e);
+  std::cout << tree.root->data << " color :" << tree.root->color << std::endl;
+  std::cout << tree.root->right->data << " color :" << tree.root->right->color << std::endl;
+  std::cout << tree.root->right->right->data << " color :" << tree.root->right->right->color << std::endl;
+  std::cout << tree.root->right->left->data << " color :" << tree.root->right->left->color << std::endl;
+  std::cout << tree.root->right->left->right->data << " color :" << tree.root->right->left->right->color << std::endl;
 }
