@@ -6,12 +6,16 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/11 17:05:13 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/12 00:34:38 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RDB_HPP
 #define RDB_HPP
+
+
+namespace  ft {
+  
 
 template<class T>
 struct Node {
@@ -281,4 +285,7 @@ class RedBlackTree {
         deleteHandler(toFix);
     }
 };
+}
+
+
 #endif
