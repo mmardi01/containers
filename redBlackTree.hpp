@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/12 00:34:38 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/13 18:57:27 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,17 @@ struct Node {
   Node(const T &val) : data(val), parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
 };
 
-template <class T> 
+template <class T, class Alloc = std::allocator<ft::Node<T> > > 
 class RedBlackTree {
   public:
-    typedef Node<T>* _Node;
-    _Node root;
+    typedef T                   value_type;
+    typedef Node<value_type>*   _Node;
+    typedef Alloc               allocator_type;
   private:
+    _Node root;
     _Node _nil;
-
+    allocator_type _alloc;
+    
     void leftRotate(_Node x)
     {
       _Node y = x->right;
@@ -87,7 +90,7 @@ class RedBlackTree {
       y->right = x;
       x->parent = y;
     }
-  void inserHandler(_Node node) {
+  void insertHandler(_Node node) {
     if (node->parent->color == 0)
       return;
     while (node->color == 1 && node->parent->color == 1) {
@@ -201,14 +204,17 @@ class RedBlackTree {
     
   public:
     RedBlackTree() {
-      _nil = new Node<T>;
+      _nil = _alloc.allocate(1);
       _nil->color = 0;
       root = nullptr;
     }
-    
-    void insert(_Node newNode) {
+    ~RedBlackTree() {delete _nil;}
+    void insert(const value_type& t) {
+      _Node newNode = _alloc.allocate(1);
+      newNode->data = t;
       newNode->left = _nil;
       newNode->right = _nil;
+      std::cout << newNode->data << std::endl;
       if (!root) {
         this->root = newNode;
         this->root->color = 0;
@@ -234,7 +240,7 @@ class RedBlackTree {
         else
           parent->left = newNode;
         
-        inserHandler(newNode);  
+        insertHandler(newNode);  
       }
     }
 

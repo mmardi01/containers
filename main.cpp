@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/12 00:15:48 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/13 18:55:51 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,6 @@
 
 int main()
 {
-  std::map<char,std::string> map;
-  map.insert(std::pair<char, std::string>('a', "hello"));
-  map.insert(std::pair<char, std::string>('b', "bello"));
-  std::map<char,std::string>::iterator a = map.begin();
-  
-  std::cout << a->first << std::endl;
+  ft::RedBlackTree<int> a;
+  a.insert(1);
 }
