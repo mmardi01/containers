@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/04 18:42:55 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/20 16:34:36 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ namespace ft
 
         explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type())
         {
-            puts("hna");
             _allocator = alloc;
             __capacity = n;
             __size = n;

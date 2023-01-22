@@ -4,6 +4,10 @@
 #include "vector.hpp"
 #include "pair.hpp"
 #include "redBlackTree.hpp"
+namespace ft
+{
+	
+
 template <class Key,class T,class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > > 
 class map {
 	public:
@@ -17,7 +21,7 @@ class map {
 		typedef typename allocator_type::pointer 				pointer;
 		typedef typename allocator_type::const_pointer 			const_pointer;
 		typedef std::ptrdiff_t 									difference_type;
-		typedef ft::RedBlackTree<value_type, allocator_type>	_rbt;
+		typedef ft::RedBlackTree<value_type>					_rbt;
 		typedef size_t											size_type;
 	private:
 		_rbt	tree;
@@ -30,13 +34,18 @@ class map {
 			_comp = comp;
 		}
 
-		// template <class InputIterator>  
-		// map(InputIterator first, InputIterator last,const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type()) {
-			
-		// }
+		template <class InputIterator>  
+		map(InputIterator first, InputIterator last,const key_compare& comp = key_compare(),const allocator_type& alloc = allocator_type()) {
+			_alloc = alloc;
+			_comp = comp;
+			while (first != last) {
+				tree.insert(*first);
+				first++;
+			}
+		}
 
 		map(const map& x) {
-			
+			tree = x.tree;
 		}
 
         // _________________/ Modifiers \_________________ //
@@ -45,4 +54,5 @@ class map {
 		// }
 
 };
+} // namespace ft
 #endif

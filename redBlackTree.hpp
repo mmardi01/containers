@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/13 18:57:27 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/21 18:21:12 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ struct Node {
   Node(const T &val) : data(val), parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
 };
 
-template <class T, class Alloc = std::allocator<ft::Node<T> > > 
+template <class T, class Alloc = std::allocator<Node<T> > > 
 class RedBlackTree {
   public:
     typedef T                   value_type;
@@ -209,12 +209,12 @@ class RedBlackTree {
       root = nullptr;
     }
     ~RedBlackTree() {delete _nil;}
-    void insert(const value_type& t) {
+    void insert(value_type t) {
       _Node newNode = _alloc.allocate(1);
       newNode->data = t;
       newNode->left = _nil;
       newNode->right = _nil;
-      std::cout << newNode->data << std::endl;
+      // std::cout << newNode->data << std::endl;
       if (!root) {
         this->root = newNode;
         this->root->color = 0;

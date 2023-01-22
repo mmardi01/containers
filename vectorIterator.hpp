@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 18:54:22 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/13 18:54:23 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/01/18 14:57:52 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,41 +44,59 @@ namespace ft
 			~vectorIterator() { ptr = NULL; };
 
 			// _________________/ Operation \_________________ //
-			bool operator == (const vectorIterator& x) const{ return (ptr == x.ptr); };
+			bool operator == (const vectorIterator& x) const
+					{ return (ptr == x.ptr); };
 
-			bool operator != (const vectorIterator& x) const{ return  (ptr != x.ptr); };
+			bool operator != (const vectorIterator& x) const
+					{ return  (ptr != x.ptr); };
 
-			reference operator * () const { return *ptr; }
+			reference operator * () const 
+					{ return *ptr; }
 
-			pointer operator->() const { return &ptr; }
+			pointer operator->() const 
+					{ return &ptr; }
 
-			vectorIterator& operator ++ () { ptr++; return *this; }
+			vectorIterator& operator ++ () 
+					{ ptr++; return *this; }
 
-			vectorIterator operator++(int) { vectorIterator tmp = *this; ptr++; return tmp; }
+			vectorIterator operator++(int) 
+					{ vectorIterator tmp = *this; ptr++; return tmp; }
 
-			vectorIterator &operator--() { ptr--; return *this; }
+			vectorIterator &operator--() 
+					{ ptr--; return *this; }
 
-			vectorIterator operator--(int) { vectorIterator tmp = *this; ptr--; return tmp; }
+			vectorIterator operator--(int) 
+					{ vectorIterator tmp = *this; ptr--; return tmp; }
 
-			vectorIterator operator + (difference_type a) const{ vectorIterator tmp = *this; tmp.ptr += a; return tmp; }
+			vectorIterator operator + (difference_type a) const
+					{ vectorIterator tmp = *this; tmp.ptr += a; return tmp; }
 
-			vectorIterator operator-(difference_type a) const { vectorIterator tmp = *this; tmp.ptr -= a; return tmp; }
+			vectorIterator operator-(difference_type a) const 
+					{ vectorIterator tmp = *this; tmp.ptr -= a; return tmp; }
 
-			difference_type operator - (const vectorIterator& x) const { return (ptr - x.ptr); }
+			difference_type operator - (const vectorIterator& x) const 
+					{ return (ptr - x.ptr); }
 
-			bool operator < (const vectorIterator& x) const{ return (ptr < x.ptr); }
+			bool operator < (const vectorIterator& x) const
+					{ return (ptr < x.ptr); }
 
-			bool operator > (const vectorIterator &x) const { return (ptr > x.ptr); }
+			bool operator > (const vectorIterator &x) const 
+					{ return (ptr > x.ptr); }
 
-			bool operator <= (const vectorIterator &x) const { return (ptr <= x.ptr); }
+			bool operator <= (const vectorIterator &x) const 
+					{ return (ptr <= x.ptr); }
 
-			bool operator >= (const vectorIterator &x) const { return (ptr >= x.ptr); }
+			bool operator >= (const vectorIterator &x) const 
+					{ return (ptr >= x.ptr); }
 
-			void operator += (difference_type a) { ptr += a; }
+			void operator += (difference_type a) 
+					{ ptr += a; }
 
-			void operator -= (difference_type a) { ptr -= a; }
+			void operator -= (difference_type a) 
+					{ ptr -= a; }
 
-			reference operator[](difference_type i) const { return ptr[i]; }
+			reference operator[](difference_type i) const 
+					{ return ptr[i]; }
 	};
 	template <class T>
 	vectorIterator<T> operator+(
