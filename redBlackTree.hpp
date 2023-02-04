@@ -6,16 +6,37 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/21 18:21:12 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/04 18:24:04 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RDB_HPP
 #define RDB_HPP
 
-
+# include <iterator>
+# include <memory>
 namespace  ft {
-  
+
+template <class T>
+class rbt_iterator : public std::iterator<T, std::bidirectional_iterator_tag> {
+  public:
+    typedef T									value_type;
+		typedef std::ptrdiff_t 		difference_type;
+		typedef T*								pointer;
+		typedef T& 								reference;
+    private:
+      pointer ptr;
+    public:
+      rbt_iterator(){}
+      rbt_iterator(const rbt_iterator& x){ptr = x.ptr}
+      rbt_iterator(const rbt_iterator& x) { ptr = x.ptr; return *this }
+      bool operator == (const rbt_iterator& x) const { return ptr->value == x.ptr->value }
+      bool operator != (const rbt_iterator& x) const { return ptr->value != x.ptr->value }
+      reference operator * () { return *ptr }
+      pointer operator -> () { return &ptr }
+      void operator = (const value_type& x) { ptr = &x }
+      
+};
 
 template<class T>
 struct Node {
@@ -31,9 +52,11 @@ struct Node {
 template <class T, class Alloc = std::allocator<Node<T> > > 
 class RedBlackTree {
   public:
-    typedef T                   value_type;
-    typedef Node<value_type>*   _Node;
-    typedef Alloc               allocator_type;
+    typedef T                       value_type;
+    typedef Node<value_type>*       _Node;
+    typedef Node<value_type>        node;
+    typedef Alloc                   allocator_type;
+    typedef ft::rbt_iterator<node>  iterator
   private:
     _Node root;
     _Node _nil;
@@ -214,7 +237,6 @@ class RedBlackTree {
       newNode->data = t;
       newNode->left = _nil;
       newNode->right = _nil;
-      // std::cout << newNode->data << std::endl;
       if (!root) {
         this->root = newNode;
         this->root->color = 0;
@@ -286,7 +308,6 @@ class RedBlackTree {
         min->left->parent = min;
         min->color = x->color;
       }
-      delete x;
       if (o_color == 0)
         deleteHandler(toFix);
     }
