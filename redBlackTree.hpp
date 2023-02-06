@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/04 18:24:04 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/06 20:58:26 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,80 @@ class rbt_iterator : public std::iterator<T, std::bidirectional_iterator_tag> {
 		typedef std::ptrdiff_t 		difference_type;
 		typedef T*								pointer;
 		typedef T& 								reference;
-    private:
       pointer ptr;
+    private:
+      pointer nil;
     public:
       rbt_iterator(){}
-      rbt_iterator(const rbt_iterator& x){ptr = x.ptr}
-      rbt_iterator(const rbt_iterator& x) { ptr = x.ptr; return *this }
-      bool operator == (const rbt_iterator& x) const { return ptr->value == x.ptr->value }
-      bool operator != (const rbt_iterator& x) const { return ptr->value != x.ptr->value }
-      reference operator * () { return *ptr }
-      pointer operator -> () { return &ptr }
-      void operator = (const value_type& x) { ptr = &x }
-      
+      rbt_iterator(const rbt_iterator& x){ptr = x.ptr; nil = x.nil;}
+      rbt_iterator& operator = (const rbt_iterator& x) { ptr = x.ptr; nil = x.nil; return *this; }
+      rbt_iterator(pointer& _ptr, pointer& _nil) { ptr = _ptr; nil = _nil; }
+      bool operator == (const rbt_iterator& x) const { return ptr->value == x.ptr->value; }
+      bool operator != (const rbt_iterator& x) const { return ptr->value != x.ptr->value; }
+      reference operator * () { return *ptr; }
+      pointer operator -> () { return &ptr; }
+      void operator = (const value_type& x) { ptr = &x; }
+      rbt_iterator& operator ++ () { 
+        ptr =  getSuccessor(ptr);
+        return *this;
+      }
+      rbt_iterator operator ++ (int) { 
+       rbt_iterator tmp(*this);
+       ++(*this);
+        return tmp;
+      }
+
+      rbt_iterator& operator -- () { 
+        ptr =  getPredesuccessor(ptr);
+        return *this;
+      }
+
+      rbt_iterator operator -- (int) { 
+       rbt_iterator tmp(*this);
+       --(*this);
+        return tmp;
+      }
+    private:
+
+    pointer getMinNode(pointer x) {
+      pointer node = x;
+      while(node->left != nil)
+        node = node->left;
+      return node;
+    }
+
+    pointer getMXNode(pointer x) {
+      pointer node = x;
+      while(node->right != nil)
+        node = node->right;
+      return node;
+    }
+    
+    pointer getSuccessor(pointer x) {
+        if (x->right != nil) {
+          return getMinNode(x->right);
+        }
+
+        pointer y = x->parent;
+        while (y != NULL && x == y->right) {
+           x = y;
+           y = x->parent; 
+        }
+        return y;
+    }
+    
+     pointer getPredesuccessor(pointer x) {
+        if (x->left != nil) {
+          return getMinNode(x->left);
+        }
+
+        pointer y = x->parent;
+        while (y != NULL && x == y->left) {
+           x = y;
+           y = x->parent; 
+        }
+        return y;
+    }
 };
 
 template<class T>
@@ -56,10 +118,10 @@ class RedBlackTree {
     typedef Node<value_type>*       _Node;
     typedef Node<value_type>        node;
     typedef Alloc                   allocator_type;
-    typedef ft::rbt_iterator<node>  iterator
-  private:
+    typedef ft::rbt_iterator<node>  iterator;
     _Node root;
     _Node _nil;
+  private:
     allocator_type _alloc;
     
     void leftRotate(_Node x)
@@ -101,8 +163,9 @@ class RedBlackTree {
     {
       _Node y = x->left;
       x->left = y->right;
-      if (y->right != _nil)
+      if (y->right != _nil) {
         y->right->parent = x;
+      }
       y->parent = x->parent;
       if (x->parent == NULL)
         this->root = y;
@@ -114,6 +177,7 @@ class RedBlackTree {
       x->parent = y;
     }
   void insertHandler(_Node node) {
+
     if (node->parent->color == 0)
       return;
     while (node->color == 1 && node->parent->color == 1) {
@@ -143,7 +207,7 @@ class RedBlackTree {
           node = node->parent->parent;
         }
          else {
-          if (node == node->parent->right) {
+          if (node == node->parent->left) {
             node = node->parent;
             rightRotate(node);
           }
@@ -229,12 +293,16 @@ class RedBlackTree {
     RedBlackTree() {
       _nil = _alloc.allocate(1);
       _nil->color = 0;
+      _nil->left = NULL;
+      _nil->right = NULL;
       root = nullptr;
     }
     ~RedBlackTree() {delete _nil;}
     void insert(value_type t) {
       _Node newNode = _alloc.allocate(1);
       newNode->data = t;
+      newNode->color = 1;
+      newNode->parent = NULL;
       newNode->left = _nil;
       newNode->right = _nil;
       if (!root) {
