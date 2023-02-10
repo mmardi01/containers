@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/07 18:11:36 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/09 01:54:56 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,15 +111,16 @@ namespace  ft {
     Node(const T &val) : data(val), parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
   };
   
-  template <class T, class Alloc = std::allocator<Node<T> > > 
+  template <class T, class Comp> 
   class RedBlackTree {
     public:
       typedef T                             value_type;
       typedef Node<value_type>*             _Node;
       typedef Node<value_type>              node;
-      typedef Alloc                         allocator_type;
+      typedef std::allocator <Node<T> >     allocator_type;
       typedef ft::rbt_iterator<node>        iterator;
-      typedef const ft::rbt_iterator<node>  const_iterator;
+      typedef const ft::rbt_iterator<node> const_iterator;
+      typedef Comp                        _comp;
       _Node root;
       _Node _nil;
     private:
@@ -160,8 +161,7 @@ namespace  ft {
         return node;
       }
   
-      void  rightRotate(_Node x)
-      {
+      void  rightRotate(_Node x) {
         _Node y = x->left;
         x->left = y->right;
         if (y->right != _nil) {
@@ -316,15 +316,17 @@ namespace  ft {
           bool r;
           while(tmp != _nil) {
             parent = tmp;
-            if (tmp->data < newNode->data) {
-              r = true; 
-              tmp = tmp->right;
-            }
-            else if (tmp->data > newNode->data) {
+            if (!_comp(tmp->data, newNode->data) && !_comp(newNode->data, tmp->data))
+              return;
+            else if (_comp(newNode->data, tmp->data))
+            {
               r = false; 
               tmp = tmp->left;
             }
-            else { return; }
+            else {
+              r = true; 
+              tmp = tmp->right;
+            }
           }
           newNode->parent = parent;
           if (r)
@@ -343,12 +345,12 @@ namespace  ft {
         _Node min;
         while(x !=  d_node)
         {
-          if (d_node->data >= x->data)
-            x = x->right;
-          else
+          if (_comp(d_node->data, x->data))
             x = x->left;
+          else
+            x = x->right;
           if (x == _nil) {
-            std::cout << "node not found\n";
+            std::cout << "key not found\n";
             return;
           }
         }
