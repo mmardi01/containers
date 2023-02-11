@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 20:24:36 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/04 17:17:23 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/10 16:49:42 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,11 @@ namespace ft
             pair() { }
             
             template <class U, class V>
-            pair(const pair<U, V> &pr) {
-                first = pr.first;
-                second = pr.second;
+            pair(const pair<U, V> &pr) : first(pr.first), second(pr.second) {
             }
 
-            pair(const first_type &a, const second_type &b) {
+            pair(const first_type &a, const second_type &b) : first(a), second(b)  {
                 
-                first = a ; second = b;
             }
 
             

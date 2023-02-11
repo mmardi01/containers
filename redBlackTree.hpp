@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/09 01:54:56 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/11 17:54:10 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,44 @@
 # include "map.hpp"
 namespace  ft {
   
-  template <class T>
+  template <class T, class Node>
   class rbt_iterator : public std::iterator<T, std::bidirectional_iterator_tag> {
     public:
       typedef T									value_type;
+      typedef Node							_Node;
   		typedef std::ptrdiff_t 		difference_type;
   		typedef T*								pointer;
   		typedef T& 								reference;
-        pointer ptr;
       private:
-        pointer nil;
+        pointer ptr;
+        _Node node;
+        _Node nil;
       public:
         rbt_iterator(){}
-        rbt_iterator(const rbt_iterator& x){ptr = x.ptr; nil = x.nil;}
-        rbt_iterator& operator = (const rbt_iterator& x) { ptr = x.ptr; nil = x.nil; return *this; }
-        rbt_iterator(pointer& _ptr, pointer& _nil) { ptr = _ptr; nil = _nil; }
-        bool operator == (const rbt_iterator& x) const { return ptr->value == x.ptr->value; }
-        bool operator != (const rbt_iterator& x) const { return ptr->value != x.ptr->value; }
+        rbt_iterator(const rbt_iterator& x) {
+          node = x.node; 
+          nil = x.nil;
+          ptr = &node->data;
+        }
+        rbt_iterator& operator = (const rbt_iterator& x) {
+          node = x.node; 
+          nil = x.nil; 
+          ptr = &node->data;
+          return *this; 
+        }
+        rbt_iterator(_Node _node, Node _nil) {
+          node = _node; 
+          nil = _nil;
+          ptr = &node->data; 
+        }
+        bool operator == (const rbt_iterator& x) const { return ptr == x.ptr; }
+        bool operator != (const rbt_iterator& x) const { return ptr != x.ptr; }
         reference operator * () { return *ptr; }
-        pointer operator -> () { return &ptr; }
+        T* operator -> () {  return &(operator*()); };
         void operator = (const value_type& x) { ptr = &x; }
         rbt_iterator& operator ++ () { 
-          ptr =  getSuccessor(ptr);
+          node =  getSuccessor(node);
+          ptr = &node->data;
           return *this;
         }
         rbt_iterator operator ++ (int) { 
@@ -49,7 +65,8 @@ namespace  ft {
         }
   
         rbt_iterator& operator -- () { 
-          ptr =  getPredesuccessor(ptr);
+          node =  getPredesuccessor(node);
+          ptr = &node->data;
           return *this;
         }
   
@@ -58,27 +75,31 @@ namespace  ft {
          --(*this);
           return tmp;
         }
+
+        int getColor() {
+        return node->color;
+      }
       private:
-        pointer getMinNode(pointer x) {
-          pointer node = x;
+        _Node getMinNode(_Node x) {
+          _Node node = x;
           while(node->left != nil)
             node = node->left;
           return node;
         }
     
-        pointer getMXNode(pointer x) {
-          pointer node = x;
+        _Node getMaxNode(_Node x) {
+          _Node node = x;
           while(node->right != nil)
             node = node->right;
           return node;
         }
       
-        pointer getSuccessor(pointer x) {
+        _Node getSuccessor(_Node x) {
             if (x->right != nil) {
               return getMinNode(x->right);
             }
     
-            pointer y = x->parent;
+            _Node y = x->parent;
             while (y != NULL && x == y->right) {
                x = y;
                y = x->parent; 
@@ -86,18 +107,19 @@ namespace  ft {
             return y;
         }
       
-       pointer getPredesuccessor(pointer x) {
+       _Node getPredesuccessor(_Node x) {
           if (x->left != nil) {
-            return getMinNode(x->left);
+            return getMaxNode(x->left);
           }
   
-          pointer y = x->parent;
+          _Node y = x->parent;
           while (y != NULL && x == y->left) {
              x = y;
              y = x->parent; 
           }
           return y;
       }
+      
   };
   
   template<class T>
@@ -118,12 +140,13 @@ namespace  ft {
       typedef Node<value_type>*             _Node;
       typedef Node<value_type>              node;
       typedef std::allocator <Node<T> >     allocator_type;
-      typedef ft::rbt_iterator<node>        iterator;
-      typedef const ft::rbt_iterator<node> const_iterator;
-      typedef Comp                        _comp;
-      _Node root;
-      _Node _nil;
+      typedef ft::rbt_iterator<value_type,_Node>        iterator;
+      typedef const ft::rbt_iterator<value_type,_Node> const_iterator;
+      typedef Comp                        comp;
     private:
+      _Node _nil;
+      _Node root;
+      comp _comp;
       allocator_type _alloc;
       
       void leftRotate(_Node x)
@@ -160,7 +183,13 @@ namespace  ft {
           node = node->left;
         return node;
       }
-  
+
+      _Node getMaxNode(_Node x) {
+        _Node node = x;
+        while(node->right != _nil)
+          node = node->right;
+        return node;
+      }
       void  rightRotate(_Node x) {
         _Node y = x->left;
         x->left = y->right;
@@ -299,10 +328,10 @@ namespace  ft {
         root = nullptr;
       }
       ~RedBlackTree() {delete _nil;}
-      void insert(value_type t) {
-        _Node newNode = _alloc.allocate(1);
-        newNode->data = t;
-        newNode->color = 1;
+      ft::pair<iterator,bool> 
+                insert(const value_type& t) {
+        _Node newNode = _alloc.allocate(1); 
+        _alloc.construct(newNode,node(t));
         newNode->parent = NULL;
         newNode->left = _nil;
         newNode->right = _nil;
@@ -316,8 +345,10 @@ namespace  ft {
           bool r;
           while(tmp != _nil) {
             parent = tmp;
-            if (!_comp(tmp->data, newNode->data) && !_comp(newNode->data, tmp->data))
-              return;
+            if (!_comp(tmp->data, newNode->data) && !_comp(newNode->data, tmp->data)) {
+              _alloc.deallocate(newNode,1);
+              return ft::make_pair(iterator(tmp,_nil), false);
+            }
             else if (_comp(newNode->data, tmp->data))
             {
               r = false; 
@@ -334,8 +365,9 @@ namespace  ft {
           else
             parent->left = newNode;
           
-          insertHandler(newNode);  
+          insertHandler(newNode);
         }
+          return ft::make_pair(iterator(newNode,_nil), true);
       }
   
       void deleteNode(_Node d_node) {
@@ -383,6 +415,15 @@ namespace  ft {
         if (o_color == 0)
           deleteHandler(toFix);
       }
+      iterator begin(){
+        return iterator(getMinNode(root), _nil);
+      }
+      iterator end(){
+        iterator end(getMaxNode(root), _nil);
+        end++;
+        return end;
+      }
+      
   };
 }
 

@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/07 18:31:23 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/11 19:15:21 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,25 @@
 #include <map>
 # include "pair.hpp"
 # include "map.hpp"
+# include "redBlackTree.hpp"
+#include <algorithm>
 
-int main() {
-  ft::map<int,int> a;
-  (void)a;
-  // _tree tree;
-  // tree.insert(ft::pair<int,int>(1,1));
-  // tree.insert(ft::pair<int,int>(2,1));
-  // tree.insert(ft::pair<int,int>(3,1));
-  // tree.insert(ft::pair<int,int>(4,1));
-  // ft::RedBlackTree<ft::pair<int,int> >::iterator it(tree.root->left, tree._nil);
-  // std::cout << it.ptr->data.first << std::endl;
-  // it++;
-  // std::cout << it.ptr->data.first << std::endl;
-  // it++;
-  // std::cout << it.ptr->data.first << std::endl;
-  // it--;
-  // std::cout << it.ptr->data.first << std::endl;
-  // it--;
-  // std::cout << it.ptr->data.first << std::endl;
-  // // it++;
-  // // it++;
+int main ()
+{
+  ft::map<char,std::string> mymap;
+  mymap['a']="an element";
+  mymap['b']="another element";
+  mymap['c']=mymap['b'];
+
+  std::cout << "mymap['a'] is " << mymap['a'] << '\n';
+  std::cout << "mymap['b'] is " << mymap['b'] << '\n';
+  std::cout << "mymap['c'] is " << mymap['c'] << '\n';
+  std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+
+  std::cout << "mymap now contains " << mymap.size() << " elements.\n";
+  if (!mymap.empty()) {
+    puts("sii");
+  }
+
+  return 0;
 }

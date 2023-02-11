@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/20 16:34:36 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/11 16:55:19 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,11 +353,9 @@ namespace ft
         template <class InputIterator>
         void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type = 0) {
             iterator it = this->begin();
-            difference_type n = last - first;
+            difference_type n = std::distance(first,last);
             size_t index = 0;
-            for (; it != position; it++) {
-                index++;
-            }
+            index = std::distance(it,position);
             ft::vector<T> tmp(*this);
             this->clear();
             if (tmp.size() == 0)
@@ -460,7 +458,7 @@ namespace ft
     }
     
     template <class T, class Alloc>
-    bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs.size() == rhs.size()); }
+    bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs == rhs); }
     
     template <class T, class Alloc>
     bool operator > (const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
