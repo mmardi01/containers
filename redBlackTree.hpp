@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/11 17:54:10 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/12 16:58:36 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,14 +177,14 @@ namespace  ft {
         node->parent = d_node->parent;     
       }
   
-      _Node getMinNode(_Node x) {
+      _Node getMinNode(_Node x) const {
         _Node node = x;
         while(node->left != _nil)
           node = node->left;
         return node;
       }
 
-      _Node getMaxNode(_Node x) {
+      _Node getMaxNode(_Node x) const {
         _Node node = x;
         while(node->right != _nil)
           node = node->right;
@@ -418,12 +418,20 @@ namespace  ft {
       iterator begin(){
         return iterator(getMinNode(root), _nil);
       }
+
+      const_iterator begin() const {
+        return const_iterator(getMinNode(root), _nil);
+      }
       iterator end(){
         iterator end(getMaxNode(root), _nil);
         end++;
         return end;
       }
-      
+      const_iterator end() const{
+        iterator end(getMaxNode(root), _nil);
+        end++;
+        return end;
+      }
   };
 }
 

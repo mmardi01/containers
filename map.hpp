@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:21:15 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/11 19:12:57 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/12 17:08:37 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,22 @@ namespace ft
             map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),  const allocator_type& alloc = allocator_type()) {
                 _alloc = alloc;
                 _comp = comp;
-                while(first != last) {
-                    tree.insert(*first++);
-                    _size++;
-                }
+                _size = 0;
+                insert(first,last);
             }
             
-            map (const map& x);
+            map (const map& x) {
+                _alloc = x._alloc;
+                _comp = x._comp;
+                insert(x.begin(),x.end());
+            };
+
+            map& operator= (const map& x) {
+                _alloc = x._alloc;
+                _comp = x._comp;
+                insert(x.begin(),x.end());
+                return *this;
+            }
             ~map() {}
         // _________________/ Modifiers \_________________ //
         ft::pair<iterator,bool> insert (const value_type& val) {
@@ -83,6 +92,15 @@ namespace ft
             if (b.second)
                 _size++;
             return b;
+        }
+
+        template <class InputIterator>  
+        void insert (InputIterator first, InputIterator last){
+            
+             while(first != last) {
+                if (tree.insert(*first++).second)
+                    _size++;
+            }
         }
         // _________________/ Iterator \_________________ //
          iterator begin() {

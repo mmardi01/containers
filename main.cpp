@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/11 19:15:21 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/12 17:14:09 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,19 @@
 
 int main ()
 {
-  ft::map<char,std::string> mymap;
-  mymap['a']="an element";
-  mymap['b']="another element";
-  mymap['c']=mymap['b'];
+ std::map<char,int> first;
+  std::map<char,int> second;
 
-  std::cout << "mymap['a'] is " << mymap['a'] << '\n';
-  std::cout << "mymap['b'] is " << mymap['b'] << '\n';
-  std::cout << "mymap['c'] is " << mymap['c'] << '\n';
-  std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+  first['x']=8;
+  first['y']=16;
+  first['z']=32;
 
-  std::cout << "mymap now contains " << mymap.size() << " elements.\n";
-  if (!mymap.empty()) {
-    puts("sii");
-  }
+  second=first;                // second now contains 3 ints
+  first=std::map<char,int>();  // and first is now empty
 
+  std::cout << "Size of first: " << first.size() << '\n';
+  std::cout << first.begin()->first << '\n';
+  std::cout << "Size of second: " << second.size() << '\n';
   return 0;
+
 }
