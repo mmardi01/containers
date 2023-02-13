@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/12 16:58:36 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/13 20:41:30 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <iterator>
 # include <memory>
 # include "map.hpp"
+# include "pair.hpp"
+#include "reverse_iterator.hpp"
 namespace  ft {
   
   template <class T, class Node>
@@ -143,6 +145,8 @@ namespace  ft {
       typedef ft::rbt_iterator<value_type,_Node>        iterator;
       typedef const ft::rbt_iterator<value_type,_Node> const_iterator;
       typedef Comp                        comp;
+      typedef ft::reverse_iterator<iterator>                          reverse_iterator;
+      typedef ft::reverse_iterator<const_iterator>                    const_reverse_iterator;
     private:
       _Node _nil;
       _Node root;
@@ -325,17 +329,19 @@ namespace  ft {
         _nil->color = 0;
         _nil->left = NULL;
         _nil->right = NULL;
-        root = nullptr;
+        root = NULL;
       }
-      ~RedBlackTree() {delete _nil;}
+      ~RedBlackTree() {}
       ft::pair<iterator,bool> 
                 insert(const value_type& t) {
+                  
         _Node newNode = _alloc.allocate(1); 
         _alloc.construct(newNode,node(t));
         newNode->parent = NULL;
         newNode->left = _nil;
         newNode->right = _nil;
-        if (!root) {
+        
+        if (!root || root == _nil) {
           this->root = newNode;
           this->root->color = 0;
         }
@@ -412,6 +418,8 @@ namespace  ft {
           min->left->parent = min;
           min->color = x->color;
         }
+        _alloc.destroy(x);
+        _alloc.deallocate(x,1);
         if (o_color == 0)
           deleteHandler(toFix);
       }
@@ -431,6 +439,21 @@ namespace  ft {
         iterator end(getMaxNode(root), _nil);
         end++;
         return end;
+      }
+
+      _Node findNode(value_type k) const {
+        _Node x = root;
+        while(_comp(x->data,  k) || _comp(k,  x->data))
+        {
+          if (_comp(k, x->data))
+            x = x->left;
+          else
+            x = x->right;
+          if (x == _nil) {
+            return NULL;
+          }
+        }
+        return x;
       }
   };
 }

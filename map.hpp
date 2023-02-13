@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:21:15 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/12 17:08:37 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/13 19:21:40 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ namespace ft
             typedef typename allocator_type::const_pointer                  const_pointer;
             typedef typename rbt_tree::iterator                             iterator;
             typedef typename rbt_tree::const_iterator                       const_iterator;
-            typedef ft::reverse_iterator<iterator>                          reverse_iterator;
-            typedef ft::reverse_iterator<const_iterator>                    const_reverse_iterator;
+            typedef typename rbt_tree::reverse_iterator                          reverse_iterator;
+            typedef typename rbt_tree::const_reverse_iterator                     const_reverse_iterator;
             typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
             typedef  size_t                                                 size_type;
             
@@ -82,6 +82,7 @@ namespace ft
             map& operator= (const map& x) {
                 _alloc = x._alloc;
                 _comp = x._comp;
+                clear();
                 insert(x.begin(),x.end());
                 return *this;
             }
@@ -102,6 +103,63 @@ namespace ft
                     _size++;
             }
         }
+        
+        void erase (iterator position) {
+            iterator it = begin();
+            while (it != position) it++;
+            typename rbt_tree::_Node node = tree.findNode(*position);
+            tree.deleteNode(node);
+            _size--;
+        }
+        size_type erase (const key_type& k) {
+            iterator it = begin();
+            while(it != end() && it->first != k) it++;
+            if (it != end()) {
+                erase(it);
+                _size--;
+                return 1;
+            }
+            return 0;
+        }
+        void erase (iterator first, iterator last) {
+            iterator tmp = first;
+            tmp++;
+            while (first != last) {
+                erase(first);
+                _size--;
+                first = tmp;
+                if (tmp != last)
+                    tmp++;
+            }
+        }
+
+        void swap (map& x) {
+            std::swap(x.tree,tree);
+            std::swap(x._comp,_comp);
+            std::swap(x._size,_size);
+            std::swap(x._alloc,_alloc);
+        }
+        void clear() {
+            erase(begin(),end());
+            _size = 0;
+        }
+        // _________________/ Operations: \_________________ //
+        iterator find (const key_type& k) {
+            iterator it = begin();
+            while (it != end() && it->first != k) it++;
+            return it;        
+        }
+        const_iterator find (const key_type& k) const {
+            iterator it = begin();
+            while (it != end()) it++;
+            return it;  
+        }
+
+        size_type count (const key_type& k) const {
+            if (tree.findNode(ft::make_pair(k,mapped_type())))
+                return 1;
+            return 0;
+        }
         // _________________/ Iterator \_________________ //
          iterator begin() {
             return tree.begin();
@@ -118,11 +176,14 @@ namespace ft
          }
 
         reverse_iterator rbegin() {
-            reverse_iterator(end());
+            return reverse_iterator(end());
         }
 
+        reverse_iterator rend(){
+            return reverse_iterator(begin());
+        }    
         const_reverse_iterator rend() const {
-            return const_reverse_iterator(end());
+            return const_reverse_iterator(begin());
         }
         // _________________/ Element Access \_________________ //
         mapped_type& operator[] (const key_type& k) {
@@ -139,6 +200,9 @@ namespace ft
         size_type size() const {
             return _size;
         }
+        // _________________/ Observers: \_________________ //
+        key_compare key_comp() const { return _comp(); }
+        value_compare value_comp() const { return  value_comp(); }
     };
 } // namespace ft
 

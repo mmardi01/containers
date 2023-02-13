@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 15:39:22 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/10 20:50:08 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/13 16:47:40 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ class reverse_iterator : public std::iterator<
 		}
 
 		reference operator*() const {
-			return *(__it - 1);
+			iterator_type tmp = __it;
+			tmp--;
+			return *(tmp);
 		}
 
 		reverse_iterator operator+(difference_type n) const {
@@ -81,7 +83,6 @@ class reverse_iterator : public std::iterator<
 		}
 
 		reverse_iterator &operator++() {
-
 			__it--;
 			return *this;
 		}

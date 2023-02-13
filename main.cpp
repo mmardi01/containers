@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/12 17:14:09 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/13 20:56:17 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,24 @@
 #include <vector>
 #include "vector.hpp"
 #include <map>
-# include "pair.hpp"
 # include "map.hpp"
 # include "redBlackTree.hpp"
 #include <algorithm>
 
 int main ()
 {
- std::map<char,int> first;
-  std::map<char,int> second;
+  ft::map<int,int> mp;
+ std::vector<int> v;
 
-  first['x']=8;
-  first['y']=16;
-  first['z']=32;
-
-  second=first;                // second now contains 3 ints
-  first=std::map<char,int>();  // and first is now empty
-
-  std::cout << "Size of first: " << first.size() << '\n';
-  std::cout << first.begin()->first << '\n';
-  std::cout << "Size of second: " << second.size() << '\n';
-  return 0;
-
+    int ratio = 10000;
+    for (int i = 0, j = 10; i < 30 * ratio; ++i, ++j) {
+        mp.insert(ft::make_pair(i, j));
+    }
+    ft::map<int, int> mp2(mp.begin(), mp.end());
+    ft::map<int, int>::iterator it = mp2.begin();
+    for (int i = 0; i < 30 * ratio; ++i, it++) {
+        v.push_back(it->first);
+        v.push_back(it->second);
+    }
+    std::cout << v.size() << std::endl;
 }
