@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 20:24:36 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/13 20:40:39 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/14 13:20:41 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,12 @@ namespace ft
                 
             }
 
-            
             pair &operator=(const pair &pr) {
                 
                  first = pr.first; 
                  second = pr.second; 
                  return *this; 
             }
-
             void swap(pair &pr) throw() {
 
                  std::swap(first, pr.first);

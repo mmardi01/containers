@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:21:15 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/13 19:21:40 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/14 20:15:44 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,26 +70,36 @@ namespace ft
                 _alloc = alloc;
                 _comp = comp;
                 _size = 0;
-                insert(first,last);
+                if (first != last)
+                    insert(first,last);
             }
             
             map (const map& x) {
                 _alloc = x._alloc;
                 _comp = x._comp;
-                insert(x.begin(),x.end());
+                _size = 0;
+                if (x.size() > 0)
+                    insert(x.begin(),x.end());
             };
 
             map& operator= (const map& x) {
                 _alloc = x._alloc;
                 _comp = x._comp;
                 clear();
-                insert(x.begin(),x.end());
+                if (x.size() > 0) {
+
+                    insert(x.begin(),x.end());
+                }
                 return *this;
             }
-            ~map() {}
+            ~map() {
+                clear();
+            }
         // _________________/ Modifiers \_________________ //
         ft::pair<iterator,bool> insert (const value_type& val) {
+
             ft::pair<iterator,bool> b = tree.insert(val);
+            
             if (b.second)
                 _size++;
             return b;
@@ -97,13 +107,16 @@ namespace ft
 
         template <class InputIterator>  
         void insert (InputIterator first, InputIterator last){
-            
+
              while(first != last) {
                 if (tree.insert(*first++).second)
                     _size++;
             }
         }
-        
+        iterator insert (iterator position, const value_type& val) {
+            (void)position;
+            insert(val);
+        }
         void erase (iterator position) {
             iterator it = begin();
             while (it != position) it++;
@@ -112,35 +125,39 @@ namespace ft
             _size--;
         }
         size_type erase (const key_type& k) {
+            if (_size) {
             iterator it = begin();
             while(it != end() && it->first != k) it++;
             if (it != end()) {
                 erase(it);
-                _size--;
                 return 1;
+            }
             }
             return 0;
         }
         void erase (iterator first, iterator last) {
+            if (_size > 0) {
             iterator tmp = first;
             tmp++;
             while (first != last) {
                 erase(first);
-                _size--;
                 first = tmp;
                 if (tmp != last)
                     tmp++;
             }
+            }
         }
 
         void swap (map& x) {
-            std::swap(x.tree,tree);
-            std::swap(x._comp,_comp);
-            std::swap(x._size,_size);
-            std::swap(x._alloc,_alloc);
+            
+          ft::map<key_type,mapped_type> tmp;
+          tmp = *this;
+          *this = x;
+          x = tmp;
         }
         void clear() {
-            erase(begin(),end());
+            if (_size > 0)
+                erase(begin(),end());
             _size = 0;
         }
         // _________________/ Operations: \_________________ //
@@ -156,7 +173,7 @@ namespace ft
         }
 
         size_type count (const key_type& k) const {
-            if (tree.findNode(ft::make_pair(k,mapped_type())))
+            if (_size > 0 && tree.findNode(ft::make_pair(k,mapped_type())))
                 return 1;
             return 0;
         }
@@ -165,9 +182,10 @@ namespace ft
             return tree.begin();
          }
          const_iterator begin() const {
-            return const_iterator(tree.begin());
+            return tree.begin();
          }
          iterator end() {
+           
             return tree.end();
          }
 

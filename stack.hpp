@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 15:39:13 by mmardi            #+#    #+#             */
-/*   Updated: 2023/01/02 19:03:37 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/14 13:21:27 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,6 @@ namespace ft {
     bool operator >= (const stack<_T,_Container>& lhs, const stack<_T,_Container>& rhs) { return (lhs.arr >= rhs.arr); }
 
     template <class T, class Container>  
-    void swap (stack<T,Container>& x, stack<T,Container>& y) throw() { x.swap(y);   }
+    void swap (stack<T,Container>& x, stack<T,Container>& y) throw() { x.swap(y); }
 }
 #endif

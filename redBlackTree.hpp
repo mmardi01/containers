@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/13 20:41:30 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/14 20:17:47 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,26 @@ namespace  ft {
         pointer ptr;
         _Node node;
         _Node nil;
+        _Node root;
       public:
         rbt_iterator(){}
         rbt_iterator(const rbt_iterator& x) {
           node = x.node; 
           nil = x.nil;
+          root = x.root;
           ptr = &node->data;
         }
         rbt_iterator& operator = (const rbt_iterator& x) {
           node = x.node; 
           nil = x.nil; 
+          root = x.root;
           ptr = &node->data;
           return *this; 
         }
-        rbt_iterator(_Node _node, Node _nil) {
+        rbt_iterator(_Node _node, _Node _nil, _Node _root) {
           node = _node; 
           nil = _nil;
+          root = _root;
           ptr = &node->data; 
         }
         bool operator == (const rbt_iterator& x) const { return ptr == x.ptr; }
@@ -106,10 +110,14 @@ namespace  ft {
                x = y;
                y = x->parent; 
             }
+            if (!y)
+              return nil;
             return y;
         }
       
        _Node getPredesuccessor(_Node x) {
+        if ( x == nil) 
+            return getMaxNode(root);
           if (x->left != nil) {
             return getMaxNode(x->left);
           }
@@ -119,6 +127,8 @@ namespace  ft {
              x = y;
              y = x->parent; 
           }
+          if (!y)
+            return nil;
           return y;
       }
       
@@ -183,13 +193,17 @@ namespace  ft {
   
       _Node getMinNode(_Node x) const {
         _Node node = x;
-        while(node->left != _nil)
-          node = node->left;
+        if (x == _nil)
+          return x;
+        while(node->left != _nil )
+            node = node->left;
         return node;
       }
 
       _Node getMaxNode(_Node x) const {
         _Node node = x;
+        if (x == _nil)
+          return x;
         while(node->right != _nil)
           node = node->right;
         return node;
@@ -331,7 +345,9 @@ namespace  ft {
         _nil->right = NULL;
         root = NULL;
       }
-      ~RedBlackTree() {}
+      ~RedBlackTree() {
+        _alloc.deallocate(_nil, 1);
+      }
       ft::pair<iterator,bool> 
                 insert(const value_type& t) {
                   
@@ -352,8 +368,9 @@ namespace  ft {
           while(tmp != _nil) {
             parent = tmp;
             if (!_comp(tmp->data, newNode->data) && !_comp(newNode->data, tmp->data)) {
+              _alloc.destroy(newNode);
               _alloc.deallocate(newNode,1);
-              return ft::make_pair(iterator(tmp,_nil), false);
+              return ft::make_pair(iterator(tmp,_nil,root), false);
             }
             else if (_comp(newNode->data, tmp->data))
             {
@@ -373,7 +390,7 @@ namespace  ft {
           
           insertHandler(newNode);
         }
-          return ft::make_pair(iterator(newNode,_nil), true);
+          return ft::make_pair(iterator(newNode,_nil,root), true);
       }
   
       void deleteNode(_Node d_node) {
@@ -418,27 +435,23 @@ namespace  ft {
           min->left->parent = min;
           min->color = x->color;
         }
-        _alloc.destroy(x);
         _alloc.deallocate(x,1);
         if (o_color == 0)
           deleteHandler(toFix);
       }
       iterator begin(){
-        return iterator(getMinNode(root), _nil);
+        
+        return iterator(getMinNode(root), _nil,root);
       }
 
-      const_iterator begin() const {
-        return const_iterator(getMinNode(root), _nil);
+      const_iterator begin() const {   
+        return const_iterator(getMinNode(root), _nil,root);
       }
       iterator end(){
-        iterator end(getMaxNode(root), _nil);
-        end++;
-        return end;
+        return  iterator(_nil,_nil,root);
       }
       const_iterator end() const{
-        iterator end(getMaxNode(root), _nil);
-        end++;
-        return end;
+          return iterator(_nil,_nil,root);
       }
 
       _Node findNode(value_type k) const {
