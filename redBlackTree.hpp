@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/14 20:17:47 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/15 21:07:36 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ namespace  ft {
         }
       
         _Node getSuccessor(_Node x) {
+          if ( x == nil) 
+            return getMaxNode(root);
             if (x->right != nil) {
               return getMinNode(x->right);
             }
@@ -110,12 +112,14 @@ namespace  ft {
                x = y;
                y = x->parent; 
             }
+            
             if (!y)
               return nil;
             return y;
         }
       
        _Node getPredesuccessor(_Node x) {
+        
         if ( x == nil) 
             return getMaxNode(root);
           if (x->left != nil) {
@@ -127,6 +131,7 @@ namespace  ft {
              x = y;
              y = x->parent; 
           }
+
           if (!y)
             return nil;
           return y;
@@ -145,13 +150,13 @@ namespace  ft {
     Node(const T &val) : data(val), parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
   };
   
-  template <class T, class Comp> 
+  template <class T, class Comp,class Alloc> 
   class RedBlackTree {
     public:
       typedef T                             value_type;
       typedef Node<value_type>*             _Node;
       typedef Node<value_type>              node;
-      typedef std::allocator <Node<T> >     allocator_type;
+      typedef  typename Alloc::template rebind<node>::other       allocator_type;
       typedef ft::rbt_iterator<value_type,_Node>        iterator;
       typedef const ft::rbt_iterator<value_type,_Node> const_iterator;
       typedef Comp                        comp;
@@ -456,17 +461,21 @@ namespace  ft {
 
       _Node findNode(value_type k) const {
         _Node x = root;
-        while(_comp(x->data,  k) || _comp(k,  x->data))
+        while(1)
         {
+          if (x->data == k)
+            return x ;
           if (_comp(k, x->data))
             x = x->left;
-          else
+          else 
             x = x->right;
-          if (x == _nil) {
+          if (x == _nil) 
             return NULL;
-          }
         }
         return x;
+      }
+      size_t maxSize() const {
+        return _alloc.max_size();
       }
   };
 }

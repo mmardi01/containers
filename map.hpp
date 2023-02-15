@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:21:15 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/14 20:15:44 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/15 21:08:15 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,16 @@ namespace ft
                                                              allocator_type;
             class value_compare : std::binary_function<value_type,value_type,bool>{
                 friend class map;
-                Compare comp;
+                protected:
+                    Compare comp;
                 public:
                     value_compare() {}
-                    bool operator() (const value_type& x, const value_type& y) const {
+                    size_t operator() (const value_type& x, const value_type& y) const {
                         return comp(x.first, y.first);
                     }    
             };
             
-            typedef ft::RedBlackTree<value_type,value_compare>              rbt_tree; 
+            typedef ft::RedBlackTree<value_type,value_compare, allocator_type>              rbt_tree; 
             typedef typename allocator_type::reference                      reference;
             typedef typename allocator_type::const_pointer                  const_pointer;
             typedef typename rbt_tree::iterator                             iterator;
@@ -93,6 +94,7 @@ namespace ft
                 return *this;
             }
             ~map() {
+
                 clear();
             }
         // _________________/ Modifiers \_________________ //
@@ -126,12 +128,12 @@ namespace ft
         }
         size_type erase (const key_type& k) {
             if (_size) {
-            iterator it = begin();
-            while(it != end() && it->first != k) it++;
-            if (it != end()) {
-                erase(it);
-                return 1;
-            }
+                iterator it = begin();
+                while(it != end() && it->first != k) it++;
+                if (it != end()) {
+                    erase(it);
+                    return 1;
+                }
             }
             return 0;
         }
@@ -156,6 +158,7 @@ namespace ft
           x = tmp;
         }
         void clear() {
+
             if (_size > 0)
                 erase(begin(),end());
             _size = 0;
@@ -218,8 +221,11 @@ namespace ft
         size_type size() const {
             return _size;
         }
+        size_type max_size() const {
+            return   tree.maxSize();
+        }
         // _________________/ Observers: \_________________ //
-        key_compare key_comp() const { return _comp(); }
+        key_compare key_comp() const { return _comp; }
         value_compare value_comp() const { return  value_comp(); }
     };
 } // namespace ft
