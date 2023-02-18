@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:21:15 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/15 21:08:15 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/18 19:31:00 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "reverse_iterator.hpp"
 #include "iterator_traits.hpp"
 #include <iostream>
+#include "equal.hpp"
 
 
 namespace ft
@@ -171,7 +172,7 @@ namespace ft
         }
         const_iterator find (const key_type& k) const {
             iterator it = begin();
-            while (it != end()) it++;
+            while (it != end() && it->first != k) it++;
             return it;  
         }
 
@@ -179,6 +180,40 @@ namespace ft
             if (_size > 0 && tree.findNode(ft::make_pair(k,mapped_type())))
                 return 1;
             return 0;
+        }
+        
+        iterator lower_bound(const key_type& k) {
+            
+            iterator it = begin();
+            while (it != end() && _comp(it->first, k)) it++;
+            return it;
+        }
+        
+        const_iterator lower_bound (const key_type& k) const {
+            const_iterator it = begin();
+            while (it != end() && _comp(it->first, k)) it++;
+            return it;
+        }
+        
+        iterator upper_bound (const key_type& k) {
+            iterator it = begin();
+            while (it != end() && !_comp(k, it->first)) it++;
+            return it;
+        }
+        
+        const_iterator upper_bound (const key_type& k) const{
+            const_iterator it = begin();
+            while (it != end() && !_comp(k, it->first)) it++;
+            return it;
+        }
+
+        ft::pair<const_iterator,const_iterator> equal_range(const key_type& k) const {
+            
+            return ft::make_pair(lower_bound(k),upper_bound(k));
+        }
+        ft::pair<iterator,iterator> equal_range(const key_type& k) {
+            
+            return ft::make_pair(lower_bound(k),upper_bound(k));
         }
         // _________________/ Iterator \_________________ //
          iterator begin() {
@@ -230,6 +265,42 @@ namespace ft
     };
 } // namespace ft
 
+template <class Key, class T, class Compare, class Alloc>  
+bool operator== ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+    if (lhs.size() != rhs.size())
+        return false;
+    return ft::equal(lhs.begin(),lhs.end(),rhs.begin());
+}
 
+template <class Key, class T, class Compare, class Alloc>  
+bool operator != ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+    return !(lhs == rhs);
+}
+
+
+template <class Key, class T, class Compare, class Alloc>  
+bool operator<( const ft:: map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+    return ft::lexicographical_compare(lhs.begin(),lhs.end(),rhs.begin(),rhs.end());
+}
+
+template <class Key, class T, class Compare, class Alloc>  
+bool operator<=( const ft:: map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+    return lhs < rhs || lhs == rhs;
+}
+
+template <class Key, class T, class Compare, class Alloc>  
+bool operator>( const ft:: map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+    return !(lhs < rhs) && !(lhs == rhs);
+}
+
+template <class Key, class T, class Compare, class Alloc>  
+bool operator>=( const ft:: map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
+    return lhs > rhs || lhs == rhs;
+}
+
+template <class Key, class T, class Compare, class Alloc>  
+void swap(ft::map<Key,T,Compare,Alloc>& x, ft::map<Key,T,Compare,Alloc>& y) {
+    x.swap(y);
+}
 
 #endif

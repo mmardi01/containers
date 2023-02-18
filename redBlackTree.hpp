@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/15 21:07:36 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/18 19:05:10 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "map.hpp"
 # include "pair.hpp"
 #include "reverse_iterator.hpp"
+#include "equal.hpp"
+
 namespace  ft {
   
   template <class T, class Node>
@@ -27,7 +29,9 @@ namespace  ft {
       typedef Node							_Node;
   		typedef std::ptrdiff_t 		difference_type;
   		typedef T*								pointer;
-  		typedef T& 								reference;
+  		typedef const T*					const_pointer;
+  		typedef T& 					      reference;
+  		typedef const T& 					const_reference;
       private:
         pointer ptr;
         _Node node;
@@ -57,7 +61,9 @@ namespace  ft {
         bool operator == (const rbt_iterator& x) const { return ptr == x.ptr; }
         bool operator != (const rbt_iterator& x) const { return ptr != x.ptr; }
         reference operator * () { return *ptr; }
-        T* operator -> () {  return &(operator*()); };
+        const_reference operator * () const{ return *ptr; }
+        pointer operator -> () {  return &(operator*()); };
+        const_pointer operator -> () const {  return &(operator*()); };
         void operator = (const value_type& x) { ptr = &x; }
         rbt_iterator& operator ++ () { 
           node =  getSuccessor(node);
@@ -136,6 +142,10 @@ namespace  ft {
             return nil;
           return y;
       }
+    public:
+      void printElement() {
+        std::cout << ptr->first << " color: " << node->color << std::endl;
+      }
       
   };
   
@@ -150,7 +160,7 @@ namespace  ft {
     Node(const T &val) : data(val), parent(NULL) ,left(NULL) ,right(NULL),  color(1) {}
   };
   
-  template <class T, class Comp,class Alloc> 
+  template <class T, class Comp, class Alloc> 
   class RedBlackTree {
     public:
       typedef T                             value_type;
@@ -198,6 +208,8 @@ namespace  ft {
   
       _Node getMinNode(_Node x) const {
         _Node node = x;
+        if (!x)
+          return _nil;
         if (x == _nil)
           return x;
         while(node->left != _nil )
@@ -477,6 +489,8 @@ namespace  ft {
       size_t maxSize() const {
         return _alloc.max_size();
       }
+
+      
   };
 }
 
