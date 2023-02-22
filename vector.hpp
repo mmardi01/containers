@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/18 14:48:38 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/02/22 16:14:52 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@
 
 namespace ft
 {
-    template <class T, class Alloc = std::allocator<T> >
-    class vector
-    {
+  template <class T, class Alloc = std::allocator<T> >
+  class vector {
     private:
         T *arr;
         size_t __size;
@@ -62,7 +61,7 @@ namespace ft
             __size = n;
             arr = _allocator.allocate(n);
             for (size_t i = 0; i < n; i++) {
-                _allocator.construct(&arr[i], val);
+                arr[i] = val;
             }
         };
         
@@ -167,7 +166,7 @@ namespace ft
                             arr[i] = tmp[i];
                         }
                         _allocator.deallocate(tmp, __capacity);
-                        __capacity =  n;
+                        __capacity *=  2;
                         while(__size < n) {
                             
                             arr[__size] = val;
@@ -279,21 +278,16 @@ namespace ft
         } 
         
         void push_back (const value_type& val) {
-            ft::vector<value_type> tmp;
-            if (__capacity == 0) { 
-                __capacity++;
-                arr = _allocator.allocate(1);
-            }
-            else if (__size == __capacity) {
-                tmp = *this;
+            if (__size == __capacity) {
+                ft::vector<value_type,allocator_type> tmp(*this);
                 _allocator.deallocate(arr, __capacity);
-                _allocator.destroy(arr);
-                arr = NULL;
                 __capacity *= 2;
+                if (__capacity == 0) __capacity++;
                 arr = _allocator.allocate(__capacity);
                 *this = tmp;
+
             }
-            _allocator.construct(&arr[__size] , val);
+           arr[__size] = val;
             __size++;
         }
 
@@ -425,7 +419,7 @@ namespace ft
         }
 
         void swap(vector &x) {
-            size_t tmpSize = __size;
+          size_t tmpSize = __size;
             size_t tmpCapacity = __capacity;
             Alloc tmpAllocator = _allocator;
             T* tmpArr = arr;

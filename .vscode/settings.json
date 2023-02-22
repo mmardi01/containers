@@ -72,7 +72,9 @@
     "__functional_03": "cpp",
     "stack": "cpp",
     "__tree": "cpp",
-    "map": "cpp"
+    "map": "cpp",
+    "__cxx_version": "cpp",
+    "set": "cpp"
   },
   "42header.username": "mmardi",
   "42header.email": "mmardi@student.42.fr"
