@@ -6,20 +6,20 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 16:21:15 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/22 19:18:00 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/03/01 15:34:23 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # ifndef _MAP_HPP_
 #define _MAP_HPP_
-
+   
 # include "redBlackTree.hpp"
 # include <memory>
-# include "pair.hpp"
-# include "reverse_iterator.hpp"
-#include "iterator_traits.hpp"
+# include "../utility/pair.hpp"
+# include "../iterators/reverse_iterator.hpp"
+#include "../iterators/iterator_traits.hpp"
 #include <iostream>
-#include "equal.hpp"
+#include "../utility/equal.hpp"
 
 
 namespace ft

@@ -6,18 +6,18 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:16:20 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/22 19:40:42 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/03/01 15:34:33 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "redBlackTree.hpp"
-# include  "memory"
-# include "pair.hpp"
-# include <iostream>
-#include "iterator_traits.hpp"
-# include "reverse_iterator.hpp"
-# include "equal.hpp"
-
+# include <memory>
+# include "../utility/pair.hpp"
+# include "../iterators/reverse_iterator.hpp"
+#include "../iterators/iterator_traits.hpp"
+#include <iostream>
+#include "../utility/equal.hpp"
+ 
 # ifndef _SET_HPP
 #define _SET_HPP
 

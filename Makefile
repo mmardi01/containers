@@ -6,7 +6,7 @@
 #    By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/27 16:51:26 by mmardi            #+#    #+#              #
-#    Updated: 2023/02/22 19:03:28 by mmardi           ###   ########.fr        #
+#    Updated: 2023/03/01 15:34:00 by mmardi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,10 +16,10 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC = main.cpp
 
-HEADER = vector.hpp vectorIterator.hpp set.hpp\
-		reverse_iterator.hpp iterator_traits.hpp \
-		stack.hpp equal.hpp enable_if.hpp map.hpp\
-		is_integral.hpp pair.hpp redBlackTree.hpp \
+HEADER =  src/vector.hpp iterators/vectorIterator.hpp src/set.hpp\
+		iterators/reverse_iterator.hpp iterators/iterator_traits.hpp \
+		src/stack.hpp utility/equal.hpp utility/enable_if.hpp src/map.hpp\
+		utility/is_integral.hpp utility/pair.hpp src/redBlackTree.hpp \
 
 OBJ = $(SRC:.cpp=.o)
 

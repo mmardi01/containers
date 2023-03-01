@@ -6,18 +6,19 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 19:37:28 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/22 19:18:45 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/03/01 17:02:02 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RDB_HPP
 #define RDB_HPP
-
+ 
 # include <iterator>
 # include <memory>
-# include "pair.hpp"
-#include "reverse_iterator.hpp"
-#include "equal.hpp"
+# include "../utility/pair.hpp"
+#include "../iterators/reverse_iterator.hpp"
+#include "../utility/equal.hpp"
+
 
 namespace  ft {
   
@@ -93,15 +94,13 @@ namespace  ft {
       private:
         _Node getMinNode(_Node x) {
           _Node node = x;
-          while(node->left != nil)
-            node = node->left;
+          while(node->left != nil) node = node->left;
           return node;
         }
     
         _Node getMaxNode(_Node x) {
           _Node node = x;
-          while(node->right != nil)
-            node = node->right;
+          while(node->right != nil) node = node->right;
           return node;
         }
       
@@ -420,10 +419,6 @@ namespace  ft {
             x = x->left;
           else
             x = x->right;
-          if (x == _nil) {
-            std::cout << "key not found\n";
-            return;
-          }
         }
         int o_color = x->color;
         if (x->left == _nil) {
@@ -441,7 +436,6 @@ namespace  ft {
           if (min->parent == x)
             toFix->parent = min;
           else {
-            
             Transplant(min,min->right);
             min->right = x->right;
             min->right->parent = min;

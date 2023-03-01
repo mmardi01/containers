@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/02/22 16:14:52 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/03/01 16:36:22 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #define VECTOR_HPP
 #include<stdio.h>
 #include <iostream>
-#include "vectorIterator.hpp"
-#include "reverse_iterator.hpp"
+#include "../iterators/vectorIterator.hpp"
+#include "../iterators/reverse_iterator.hpp"
 # include <algorithm>
-# include "is_integral.hpp"
-# include "enable_if.hpp"
-
+# include "../utility/is_integral.hpp"
+# include "../utility/enable_if.hpp"
+  
 
 namespace ft
 {
@@ -77,7 +77,6 @@ namespace ft
                 arr[i] = *first;
                 i++;
             }
-            
         }
         
         vector (const vector& x)
@@ -99,9 +98,7 @@ namespace ft
                 arr = _allocator.allocate(__capacity);
             }
             for (size_t i = 0; i < __size; i++)
-            {
                 arr[i] = x.arr[i];
-            }
             return *this;
         };
 
@@ -218,7 +215,6 @@ namespace ft
 
         reference at(size_type n) { 
             if (n >= __size){
-                // std::string err = "vector::_M_range_check: __n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(__size) + ")";
                 throw std::out_of_range("index out of range");
             }
             return arr[n];
@@ -226,7 +222,6 @@ namespace ft
 
         const_reference at(size_type n) const {
             if (n >= __size){
-                // std::string err = "vector::_M_range_check: __n (which is " + std::to_string(n) + ") >= this->size() (which is " + std::to_string(__size) + ")";
                 throw std::out_of_range("index out of range");
             }
             return arr[n]; 
@@ -270,8 +265,7 @@ namespace ft
                 arr = _allocator.allocate(n);
                 __capacity = n;
            }
-           for (size_t i = 0; i < __size; i++)
-           {
+           for (size_t i = 0; i < __size; i++) {
                 _allocator.construct(&arr[i], val);
            }
            
@@ -324,8 +318,7 @@ namespace ft
             this->clear();
             if (tmp.size() == 0) {
                 reserve(n);
-                for (size_t i = 0; i < n; i++)
-                {
+                for (size_t i = 0; i < n; i++) {
                     push_back(val);
                 }
             }
@@ -339,7 +332,6 @@ namespace ft
                         push_back(val);
                     }
                 }
-                
                 push_back(tmp[i]);
             }
         }
@@ -351,26 +343,16 @@ namespace ft
             size_t index = 0;
             index = std::distance(it,position);
             ft::vector<T> tmp(*this);
+            ft::vector<T> tmp2;
+            while(first!=last)
+                tmp2.push_back(*first++);
             this->clear();
-            if (tmp.size() == 0)
-            {
-                reserve(n);
-                for (difference_type i = 0; i < n; i++)
-                {
-                    push_back(*first);
-                    first++;
-                }
-            }
-            for (size_t i = 0; i < tmp.size(); i++)
-            {
+            for (size_t i = 0; i < tmp.size(); i++) {
                 if (n > (difference_type)__capacity)
                     reserve(__capacity + n);
-                if (i == index)
-                {
-                    for (difference_type i = 0; i < n; i++)
-                    {
-                        push_back(*first);
-                        first++;
+                if (i == index) {
+                    for (difference_type i = 0; i < n; i++) {
+                        push_back(tmp2[i]);
                     }
                 }
                 push_back(tmp[i]);
@@ -394,7 +376,6 @@ namespace ft
                 arr[i] = tmp[t++];
             }
             return iterator(&arr[index]);
-            
         }
 
         iterator erase(iterator first, iterator last) {
