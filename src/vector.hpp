@@ -6,7 +6,7 @@
 /*   By: mmardi <mmardi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 15:42:08 by mmardi            #+#    #+#             */
-/*   Updated: 2023/03/01 16:36:22 by mmardi           ###   ########.fr       */
+/*   Updated: 2023/03/01 18:58:58 by mmardi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ namespace ft
             __size = n;
             arr = _allocator.allocate(n);
             for (size_t i = 0; i < n; i++) {
-                arr[i] = val;
+                // _allocator.construct(&arr[i],val);
+                // arr[i] = val;
+                push_back(val);
             }
         };
         
